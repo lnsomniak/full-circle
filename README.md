@@ -28,11 +28,11 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 
 ## Current Status
 
-**In Progress** - Building proof of concept
+**In Progress** - Completed proof of concept in the shape of pulling listening history, next is audio features. 
 
 - [x] Project setup
-- [ ] Spotify API authentication
-- [ ] Pull listening history and audio features
+- [x] Spotify API authentication
+- [x] Pull listening history and audio features
 - [ ] Basic similarity algorithm
 - [ ] FastAPI backend MVP
 - [ ] React frontend MVP
