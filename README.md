@@ -2,8 +2,7 @@
 
 ## What This Is
 
-A personalized music recommendation system that actually understands my taste across genres. Built out of spite towards the giants of the music world, because I'm tired of algorithmic playlists that don't get the vibe. My taste ranges music across UK rap, Latin indie, and alt rock, and most recommendation engines can't handle that range.
-
+A personalized music recommendation system that actually understands my taste across genres. Built out of spite towards the giants of the music world, because I'm tired of algorithmic playlists that don't get the vibe. My taste ranges music across UK rap, Latin indie, and alt rock, etc etc.. and a wider net creates room for error in algorithms! This would allow me to control not only the net, but the whole ship. 
 ## The Problem
 
 Spotify's recommendations are decent, but they're trained on everybody. I want something that learns *my* specific taste, the energy I look for, the moods I gravitate toward, the way I jump between completely different genres. This is that tool. Something to match my energy that I’d appreciate.. 
