@@ -39,3 +39,21 @@
 - Converted ugly ISO timestamps that Spotify gives out and converted it to a readable human format using a python module in datetime
 - Finally got proof of concept after a day of working and reading documentation! 
  
+
+## Demotivation
+**Date:** Nov 24, 2025
+**Time:** 5:55PM
+**Problem:** I got my proof of concept, it was a proud moment and I was extremely excited to continue this morning at 11:30am after finishing my morning routine. The reality was I was extremely demotivated.
+**Solution:** I stood up and moved my life around so I won't have to code when I'm not feeling it. I'm writing this as a reminder to look back on that I do not have to code when I don't feel like it, quality > quantity. 
+
+## Spotify Audio Features Blocked 
+**Date:** Nov 24, 2025
+**Time:** 9:32PM
+**Problem:** 
+- Spent an hour and a half debugging authentication thinking it was a token issue 
+- Print checked and discovered I had a valid token all along (verified with sp.track() which worked) 
+- both "sp.audio_features()" and "sp.audio_analysis" returned 403 even with a verifiably valid auth
+- Apparently personal spotify apps in dev mode are restricted from those endpoints, even tried to verify with creating a different test app to see if I was running out of requests, nope. 
+- No way around it, only orgs can request quota extensions
+**The Pivot:** Choosing to switch to Lastfm API an alternative data source, and it's look bright so far. 
+**What I learned:** Although the wall was two hours long, last fm's tags will likely be better for machine learning so overall a win.  
