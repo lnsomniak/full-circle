@@ -57,3 +57,37 @@
 - No way around it, only orgs can request quota extensions
 **The Pivot:** Choosing to switch to Lastfm API an alternative data source, and it's look bright so far. 
 **What I learned:** Although the wall was two hours long, last fm's tags will likely be better for machine learning so overall a win.  
+
+## The absolute most progress i've made in 6 hours after physical therapy
+**Date:** Nov 25-26, 2025
+**Time:** 5:45PM Nov 25, - 2:09AM Nov 26 
+**Problem:** Needed to expand on the lastfm API and continuous history tracker to enable personalized recommendations and then ultimately ML training. 
+**What I built:** 
+1. **Taste Profile System (build_test_profile.py)**
+- pulls recent Spotify listening history (the max that Spotify allows at a time which is 50 tracks)
+- extracts the unique artists using set() for efficiency
+- gets last.fm tags for each artist named
+- calculates the composite scores for each using sqrt which is avg_weight x sqrt(the amount of unique artists)
+- balances niche interests through said sqrt method so their average doesn't rank them higher simply because it's weight is being multiplied by 1
+- saves timestamped JSON profiles for tracking taste evolution and to not overlap!
+2. **SQLITE Database Schema (setup_database.py)**
+- primary function is to not only save the data i've provided. 
+3. **Incremental Sync System (sync_listening_history.py)** 
+- uses Spotify's 'after' parameter for incremental pulls
+- only gets plays since the last time it's saved to sync
+- logs new plays and specifically skips duplicate plays (although given the timeframe is like a milisecond this won't be used a lot)
+4. **Automated Cron Jobs**
+- used cron to automate the collection data, runs 3x daily! 8am, 2pm, 10pm. 
+- captures my ~77 songs/day without missing anything
+- logs to sync.log for monitoring!
+
+**What I learned:**
+- What didn't I learn. I really liked the further experience in using sets, given I did have multiple w3schools tabs open. Figuring out which scoring i wanted to use in order to balance my taste in music, I'm really appreciating just how unique i'm able to make this code since it's just for me. 
+- Cron was super easy to learn, really cool that it can do that. 
+- PRIMARY KEY constraints handling duplicates at the database level- all of SQLlite is a fever dream thank you to that one Coursea Course I took and furthermore thank you to claude for helping further explain that coursea was teaching me, so I could not only intake the information that coursea was feeding me and write it down using a physical notebook, but then have claude explain it until i understood it. Really good way to learn and it's why I was able to do a lot of this in the timeframe I've done it, given it still has taken me days and hours of documentation. 
+
+**Next Steps:** 
+- I requested my entire Spotify data dump- ideally I will be importing that data for a more robust training. 
+- Actually building the recommendation engine (dreadful) 
+- continue to collect data! 
+
