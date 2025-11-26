@@ -11,9 +11,12 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 
 **Backend:**
 - Python (FastAPI)
-- Spotify Web API for data collection
+- Spotify Web API 
+- Spotipy API for ease of access
+- Last.FM API for genre trend for further data collection
 - scikit-learn for ML models
-- PostgreSQL for data storage
+- SQLite for data storage
+- CronTab for automatation
 - Redis for caching (maybe, if needed)
 
 **Frontend:**
