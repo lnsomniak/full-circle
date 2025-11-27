@@ -15,12 +15,14 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 - Last.FM API(pylast) - genre trend for further data collection 
 - SQLite - 140k+ plays stored with varying timestamps
 - CronTab - automated 3x daily sync (8am, 2pm, 10pm)
+  
 **Machine Learning:**
 - scikit-learn - Random Forest classifier
 - NumPy/Pandas - data processing and feature engineering
 - Time weighted listening patterns (exponential decay)
 - Tag based feature vectors from [Last.fm](http://last.fm/)
 - Composite scoring (tag similarity × endorsement strength)
+  
 **Recommendation Engine:**
 - Hybrid approach: collaborative filtering + content based
 - Tag similarity matching
