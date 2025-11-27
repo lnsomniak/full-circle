@@ -91,3 +91,52 @@
 - Actually building the recommendation engine (dreadful) 
 - continue to collect data! 
 
+## 	ML Training Setup & Time-Weighted Recommendation Bug Hunt
+**Date:** Nov 27, 2025 - Nov 28,2025
+**Time:** 11:43AM - 3:05AM
+ 
+**Problem:**
+Started building ML recommendation model with time weighted listening data, but weighting was completely backwards since I recognized old artists from 2019-2021 were ranking higher than current favorite (was my latest problem at least)
+
+**The Journey:**
+
+1. **Imported 140,392 plays from Spotify extended history** (2019-2025, 6 years!! thank you spotify extended history)
+    - 2,917 unique artists
+    - Filtered out plays < 30 seconds (41,028 skips removed)
+    - Mac Miller: 13,991 total plays
+2. **Implemented time decay weighting**
+    - Goal: Recent plays matter more than old plays
+    - Used exponential decay: weight = exp(-ln(2) × days_ago / half_life)
+    - Started with 365-day half-life, too gentle
+    - Adjusted to 90-day half-life for aggressive recency
+3. **THE TWO HOUR BUG - Backwards Time Calculation**
+    - Original code: `days_since_first = played_at - first_play`
+    - this oddly enough made Sept 2019 plays have weight 1.0, Nov 2025 plays have weight ~0
+    - immediately looking at the results it made sense very quickly that they were inverted.
+    - even through this, i had no idea which line amde the most sense!
+4. fixxer upper!
+    - Changed to: `days_ago = most_recent_play - played_at`
+    - TODAY has weight 1.0, old plays decay toward 0 m as originally planned
+
+**Other Issues Solved:**
+
+- **Mixed timestamp formats**: Some Spotify timestamps have milliseconds (.724Z), some don't
+    - Solution: `pd.to_datetime(format='ISO8601')` handles both automatically
+- **Weighted count calculation**: Initially just summed time_weight per artist, didn't multiply by play_count
+    - Solution: `weighted_count = play_count × time_weight` then aggregate
+
+**What I learned:**
+
+- ALWAYS verify time-based calculations with real examples, I was rushing given that I had a lot of the stuff written in my notebook.
+- WHEN results don't match intuition, check the math direction (forward vs backward),
+- EXPONENTIAL decay is powerful but needs the good half of your data.
+- Pandas datetime operations are reallyyyy weird- test with actual data
+- 90-day half-life captures my taste evolution perfectly (6 months ago ≈ 25% weight)
+
+**Final accurate top 5(in case anyone is wondering):**
+
+1. Mac Miller (1,651 weighted from 13,991 total)
+2. Bad Bunny (1,518 from 5,075)
+3. Laufey (854 from 3,933)
+4. Mon Laferte (720 from 2,861)
+5. The Marías (355 from 1,651)
