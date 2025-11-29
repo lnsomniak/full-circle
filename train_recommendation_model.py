@@ -1,4 +1,5 @@
 import os
+import json
 import pylast
 import pickle
 import sqlite3
