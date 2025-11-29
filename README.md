@@ -20,6 +20,7 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 - scikit-learn - Random Forest classifier
 - NumPy/Pandas - data processing and feature engineering
 - Time weighted listening patterns (exponential decay)
+- XGBoost & Random Forest
 - Tag based feature vectors from [Last.fm](http://last.fm/)
 - Composite scoring (tag similarity × endorsement strength)
   
@@ -34,7 +35,7 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 - React + Tailwind CSS frontend
 - Redis for caching
 
-## Current Status
+## Current Status 
 
 **Phase 1: Data & ML Foundation** ✅ COMPLETE
 
@@ -48,20 +49,21 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 - [x]  Composite scoring algorithm (sqrt scaling)
 - [x]  ML feature matrix preparation (1,540 unique tags)
 
-**Phase 2: ML Model Training** 🚧 IN PROGRESS
+**Phase 2: ML Model Training** ✅ COMPLETE
 
 - [x]  Data labeling (top 25% = "liked")
 - [x]  Feature engineering (tag based vectors)
-- [ ]  Random Forest training
-- [ ]  Model evaluation & tuning
-- [ ]  Prediction pipeline
+- [x]  Random Forest training
+- [x]  Model evaluation & tuning
+- [x]  Prediction pipeline
 
-**Phase 3: Production** 📋 PLANNED
+**Phase 3: Production** 🚧 IN PRODUCTION!! 
 
 - [ ]  FastAPI backend MVP
 - [ ]  React frontend MVP
 - [ ]  Model serving endpoint
 - [ ]  Deploy somewhere I can actually use it
+      
 ## Why I'm Building This
 
 1. **Real ML application** - Solving an actual problem with production grade code
@@ -93,8 +95,8 @@ Instead of fetching tags for all 2,929 artists (20+ min), sample 500 liked + 500
 
 - ✅ Time series feature engineering using datetime
 - ✅ Hybrid recommendation systems
+- ✅ API design and deployment
 - 🚧 A good understanding of the complex and core libaries of Machine Learning
-- 📋 API design and deployment
 - 📋 Frontend state management
 - 📋 Model monitoring and retraining
 
