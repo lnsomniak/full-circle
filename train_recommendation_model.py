@@ -347,14 +347,120 @@ all_feature_names = list(tfidf.get_feature_names_out()) + behavioral_names_enhan
 importances = final_xgb_model.feature_importances_
 feature_importance = list(zip(all_feature_names, importances))
 feature_importance.sort(key=lambda x: x[1], reverse=True)
+################################################################################################################################
+                 #guys it is time to actually start pushing this to fast api. I added pickle, now we win.   
+################################################################################################################################
+# i am still boycotting IDE's.
 
-for i, (feature, importance) in enumerate(feature_importance[:20], 1):
-    print(f"{i:2}. {feature:35} - {importance:.4f}")
+print("\n" + "="*60)
+print("SAving model artifacts for production deployment...")
+print("="*60)
 
-with open('fullcircle_model_v1.pkl', 'wb') as f:
+# creating directory first iloveyou'os'
+MODEL_DIR = 'model_artifacts'
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+# now post creation of directory, save my final_xgb_model i should defintely rename this
+model_path = os.path.join(MODEL_DIR, 'final_xgb_model.pkl')
+with open(model_path, 'wb') as f:
     pickle.dump(final_xgb_model, f)
+print(f"✓ Saved optimized XGBoost model to {model_path}!!")
 
-with open('tfidf_vectorizer_v1.pkl', 'wb') as f:
-    pickle.dump(tfidf, f)
+# Next is to probably save the Vectorizer
+tfidf_path = os.path.join(MODEL_DIR, 'tfidf_vectorizer.pkl')
+with open(tfidf_path, 'wb') as f:
+    pickle.dump(tfidf, f) # i love you pickle i'm not kidding
+print(f"✓ Saved fitted TF-IDF Vectorizer to {tfidf_path}")
 
-print("✓ Model and vectorizer saved!")
+# Saving the full list of feature names (needed for prediction order) 
+feature_names_path = os.path.join(MODEL_DIR, 'feature_names.pkl') # note I love how easy this part is, after coding for days something like this so mindless that WON'T fail is a relief. 
+with open(feature_names_path, 'wb') as f:
+    pickle.dump(all_feature_names, f) 
+print(f"✓ Saved feature name list to {feature_names_path}")
+
+# save behavioral means for "Liked" artists
+liked_artists_behavioral = training_artists[training_artists['label'] == 1]
+
+behavioral_means = {
+    'late_night_ratio': float(liked_artists_behavioral['late_night_ratio'].mean()),
+    'weekend_ratio': float(liked_artists_behavioral['weekend_ratio'].mean()),
+    'consistency_score': float(liked_artists_behavioral['consistency_score'].mean()),
+    'consistency_std': float(liked_artists_behavioral['consistency_std'].mean()),
+    'late_weekend_interaction': float(liked_artists_behavioral['late_weekend_interaction'].mean()),
+    'consistency_x_late_night': float(liked_artists_behavioral['consistency_x_late_night'].mean()),
+    'all_behavioral': float(liked_artists_behavioral['all_behavioral'].mean()),
+}
+# so many ctrl -f's were had to make this ^
+behavioral_means_path = os.path.join(MODEL_DIR, 'behavioral_means.pkl')
+with open(behavioral_means_path, 'wb') as f:
+    pickle.dump(behavioral_means, f)
+print(f"✓ Saved behavioral means to {behavioral_means_path}")
+
+# save all da features for 
+print("\nPre computing feature vectors for all training artists...")
+all_artists_for_recs = training_artists[['artist', 'label']].copy()
+
+all_feature_vectors = []
+for idx, row in training_artists.iterrows():
+    artist_name = row['artist']
+    tags = artist_tags.get(artist_name, {})
+    tag_list = [tag for tag in tags.keys()]
+    
+    # Build feature vector same way as training
+    tag_string = " | ".join(tag_list) if tag_list else ""
+    tfidf_vec = tfidf.transform([tag_string]).toarray().flatten()
+    
+    # Get behavioral features in correct order, thank god for the thing I made above full of floats.
+    behavioral_vec = training_artists.loc[idx, [
+        'late_night_ratio', 'weekend_ratio', 'consistency_score', 
+        'consistency_std', 'late_weekend_interaction', 
+        'consistency_x_late_night', 'all_behavioral'
+    ]].values
+    
+    full_vec = np.hstack([tfidf_vec, behavioral_vec])
+    all_feature_vectors.append(full_vec)
+
+all_artists_for_recs['features'] = all_feature_vectors
+all_artists_for_recs.columns = ['artist_name', 'label', 'features']
+
+all_artists_path = os.path.join(MODEL_DIR, 'all_artists_df.pkl')
+all_artists_for_recs.to_pickle(all_artists_path)
+print(f"✓ Saved artist database ({len(all_artists_for_recs)} artists) to {all_artists_path}")
+
+# In my research this is something so cool to me.
+# saving the meta data for versioning 
+metadata = {
+    'trained_at': datetime.now().isoformat(),
+    'test_accuracy': float(accuracy),
+    'cv_accuracy': float(grid_search.best_score_),
+    'n_training_samples': int(len(X_train)),
+    'n_test_samples': int(len(X_test)),
+    'n_features': int(X.shape[1]),
+    'best_params': grid_search.best_params_,
+    'half_life_days': 90,
+    'quantile_threshold': 0.75,
+    'behavioral_means': behavioral_means,
+    'feature_count_breakdown': {
+        'tfidf_tags': 300,
+        'behavioral': 7,
+        'total': 307
+    }
+}
+
+metadata_path = os.path.join(MODEL_DIR, 'model_metadata.json')
+with open(metadata_path, 'w') as f:
+    json.dump(metadata, f, indent=2)
+print(f"✓ Saved model metadata to {metadata_path}")
+# checkers 
+print("\n" + "="*60)
+print("✅ All model artifacts saved successfully!")
+print("="*60)
+print(f"\nModel artifacts directory: {MODEL_DIR}/")
+print("Files created:")
+print("  - final_xgb_model.pkl (trained XGBoost model)")
+print("  - tfidf_vectorizer.pkl (fitted TF-IDF transformer)")
+print("  - feature_names.pkl (307 feature names in order)")
+print("  - behavioral_means.pkl (average behavioral features for liked artists)")
+print("  - all_artists_df.pkl (1,468 artists with pre computed vectors)")
+print("  - model_metadata.json (training metadata and performance)")
+print("\nReady for FastAPI deployment! WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
