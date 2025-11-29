@@ -33,16 +33,10 @@ ORDER BY played_at
 df = pd.read_sql_query(query, conn)
 conn.close()
 
+# next part is just converting played_at into readable time, so using datetime we imported earlier
 print(f"Loaded {len(df)} play records")
 print(f"\nDate range: {df['played_at'].min()} to {df['played_at'].max()}")
-#next part is just converting played_at into readable time, so using datetime we imported earlier
-#edit! which got fixed later related to the issue of not all my songs having the same time! 
 df['played_at'] = pd.to_datetime(df['played_at'], format='ISO8601')
-# I googled a way to do this well, but honestly it didn't take long to find the time_decay function. I'm gonna start setting it up here
-# edit! ^ Some of the songs don't include miliseconds! I rewrote this to tell pandas to just handle both formats automatically. This will be reflected in my DEV_LOG
-#      first_play = df['played_at'].min()
-#      df['days_since_first'] = (df['played_at'] - first_play).dt.days
-# i'm highlighting these two lines because they ruined my code for a while, i had to do so many lookups of specific songs because artists that I hadn't listened to in over a year were appearing.
 half_life_days = 90
 most_recent_play = df['played_at'].max()
 df['days_ago'] = (most_recent_play - df['played_at']).dt.days
@@ -149,7 +143,6 @@ print(f"  Consistency score: {mac_miller['consistency_score']:.3f}")
 print(f"\nLabeling:")
 print(f"  Liked (1): {artist_stats['label'].sum()} artists (weighted_plays >= {threshold:.1f})")
 print(f"  Not preferred (0): {len(artist_stats) - artist_stats['label'].sum()} artists")
-# top 500 liked + 500 random not liked is the best way I fouind to balance the lack of API calls i'm able to do, also the diminishing returns that after 1000 examples apparently happens
 # this lets the mdoel see 50/50 examples and learns to distinguish the features that predict both classes (in theory)
 liked_artists = artist_stats[artist_stats['label'] == 1]
 not_liked_sample = min(500, len(artist_stats[artist_stats['label'] == 0]))
@@ -172,14 +165,14 @@ for idx, row in training_artists.iterrows():
     try:
         artist = network.get_artist(artist_name)
         tags = artist.get_top_tags(limit=10)
-        
+     # this entire section is just me putting in separations for tags, as well as some english alphabet rules!
         tag_dict = {}
         for tag in tags:
             tag_name = tag.item.name.lower() # no more separate "hip hop" and "Hip Hop" tags
             
             tag_name = tag_name.replace('hip hop', 'hip-hop')
             tag_name = tag_name.replace('hip_hop', 'hip-hop') # is this very specific to me? yes. do I care? no
-# stand alone noise that i see very often. 
+# stand alone noise that i saw very often in my results 
             if tag_name in ['hop', 'the', 's', 'and', 'new']:
                 continue
 
@@ -194,7 +187,7 @@ for idx, row in training_artists.iterrows():
             print(f"  Processed {len(artist_tags)}/{len(training_artists)} artists...")
     
     except Exception as e:
-        artist_tags[artist_name] = {}  # if error
+        artist_tags[artist_name] = {}  
 
 print(f"\n✓ Collected tags for {len(artist_tags)} artists")
 print(f"✓ Found {len(all_tags)} unique tags")
@@ -209,7 +202,7 @@ for idx, row in training_artists.iterrows():
     tags = artist_tags.get(artist_name, {})
     tag_list = [tag for tag in tags.keys()]
     artist_tag_sentences.append(" ".join(tag_list) if tag_list else "")
-
+# more ensuring that the results are filled with as little noise as possible 
 tfidf = TfidfVectorizer(
     max_features=300,  
     min_df=5,           
@@ -326,7 +319,7 @@ print("\n✓ Grid Search Complete!")
 print(f"Best CV Accuracy found: {grid_search.best_score_:.2%}")
 print(f"Best Hyperparameters: {grid_search.best_params_}")
 
-# final model please
+# was indeed the final model
 final_xgb_model = grid_search.best_estimator_
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -338,8 +331,6 @@ y_pred = final_xgb_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 
 print(f"\nFinal Model Test Accuracy (using best params): {accuracy:.2%}")
-
-
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred, target_names=['Not Preferred', 'Liked']))
 
