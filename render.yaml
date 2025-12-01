@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: fullcircle-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon 
+    plan: free  
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: LASTFM_API_KEY
+        sync: false   
+      - key: LASTFM_API_SECRET
+        sync: false

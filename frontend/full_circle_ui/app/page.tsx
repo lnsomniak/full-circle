@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+// Use environment variable for API URL, fallback to localhost for dev
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 export default function Home() {
   const [artistName, setArtistName] = useState('');
   const [tagsInput, setTagsInput] = useState('');
@@ -26,7 +29,7 @@ export default function Home() {
 
     try {
       // fetch call talks to the python backend 
-      const res = await fetch('http://127.0.0.1:8000/recommend', {
+      const res = await fetch(`${API_BASE_URL}/recommend`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +50,6 @@ export default function Home() {
 
       // handles the response
       if (data.message) {
-        // this handles the "Low Confidence" case logic returns
         setError(`Message from Model: ${data.message}`);
       } else {
         setPredictionProb(data.prediction_probability);
@@ -110,7 +112,7 @@ export default function Home() {
                         className="form-checkbox h-5 w-5 text-green-600 rounded border-gray-600 bg-gray-700 transition duration-150 ease-in-out"
                     />
                     <span className="text-sm text-gray-300 select-none">
-                        **Enable Weighted Tag Similarity** (Prioritizes niche/rare tags like `-bit`)
+                        Enable Weighted Tag Similarity (Prioritizes niche/rare tags)
                     </span>
                 </label>
             </div>

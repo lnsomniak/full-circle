@@ -30,10 +30,14 @@ app = FastAPI(
     description="FastAPI interface for the FullCircle ML Recommender.",
     version=api_version
 )
+
+# Updated CORS - will add production URL when deployed
 origins = [
     "http://localhost:3000", 
-    "http://127.0.0.1:3000", 
+    "http://127.0.0.1:3000",
+    
 ]
+
 # CORS middleware to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
@@ -72,9 +76,11 @@ def get_recommendations(request: RecommendationRequest):
         )
 
     try:
+        # FIX: Now passing weighted_similarity through to the prediction function
         recommendations = predict.generate_recommendations(
             new_artist_name=request.artist_name, 
-            new_artist_tags=request.tags, 
+            new_artist_tags=request.tags,
+            weighted=request.weighted_similarity,
             threshold=0.60, # this threshold will be edited, can confirm.
             top_n=10
         )
@@ -83,12 +89,14 @@ def get_recommendations(request: RecommendationRequest):
             return {
                 "message": recommendations[0]['message'],
                 "artist_name_input": request.artist_name,
-                "prediction_probability": recommendations[0]['probability'] 
+                "prediction_probability": recommendations[0]['probability'],
+                "weighted_similarity_enabled": request.weighted_similarity
             }
 
         return {
             "artist_name_input": request.artist_name,
             "prediction_probability": recommendations[0]['prediction_confidence'],
+            "weighted_similarity_enabled": request.weighted_similarity,
             "recommendations": recommendations
         }
 
