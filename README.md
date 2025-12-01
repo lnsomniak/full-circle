@@ -17,7 +17,6 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 - CronTab - automated 3x daily sync (8am, 2pm, 10pm)
   
 **Machine Learning:**
-- scikit-learn - Random Forest classifier
 - NumPy/Pandas - data processing and feature engineering
 - Time weighted listening patterns (exponential decay)
 - XGBoost & Random Forest
@@ -61,7 +60,7 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 
 - [X]  FastAPI backend MVP
 - [X]  Next.js frontend MVP
-- [ ]  Model serving endpoint
+- [x]  Model serving endpoint
 - [ ]  Deploy somewhere I can actually use it
       
 ## Why I'm Building This
@@ -96,8 +95,8 @@ Instead of fetching tags for all 2,929 artists (20+ min), sample 500 liked + 500
 - ✅ Time series feature engineering using datetime
 - ✅ Hybrid recommendation systems
 - ✅ API design and deployment
+- ✅ Frontend state management
 - 🚧 A good understanding of the complex and core libaries of Machine Learning
-- 📋 Frontend state management
 - 📋 Model monitoring and retraining
 
 ## Development Log
@@ -107,6 +106,6 @@ Detailed technical documentation and debugging sessions in `DEV_LOG.md`.
 ---
 
 *Started: November 2024*  
-**Current Phase:** Handwriting documentation to better understand the psuedocode! (core libraries, deep learning, librosa, optuna, lightfm even) 
+**Current Phase:** Nearing of Project, deploying using Render & Vercel for a Dockerized Python backend. 
 Built with curiosity and too much time spent organizing playlists. Thank you Dan Sohval for the inspiration.
 
