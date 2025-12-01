@@ -10,11 +10,9 @@ from scipy.spatial.distance import cosine
 from typing import List, Dict, Tuple
 import os
 
-# --- Configuration ---
 MODEL_DIR = 'model_artifacts'
 BLACKLIST_TAGS = {'hop', 's', 'boy', 'good', 'east', 'states', 'new'}
 
-# --- Load Model Artifacts ---
 print("Loading model artifacts...")
 final_xgb_model = pickle.load(open(f'{MODEL_DIR}/final_xgb_model.pkl', 'rb'))
 tfidf = pickle.load(open(f'{MODEL_DIR}/tfidf_vectorizer.pkl', 'rb'))
@@ -22,12 +20,31 @@ all_feature_names = pickle.load(open(f'{MODEL_DIR}/feature_names.pkl', 'rb'))
 behavioral_means = pickle.load(open(f'{MODEL_DIR}/behavioral_means.pkl', 'rb'))
 all_artists_df = pd.read_pickle(f'{MODEL_DIR}/all_artists_df.pkl')
 
+try:
+    print(f"DEBUG: TFIDF loaded successfully: {tfidf}")
+    IDF_WEIGHTS = tfidf.idf_
+    FEATURE_NAMES = tfidf.get_feature_names_out()
+    IDF_MAP = dict(zip(FEATURE_NAMES, IDF_WEIGHTS))
+    
+    # NEW DEBUG CODE:
+    print(f"DEBUG: IDF_WEIGHTS shape: {IDF_WEIGHTS.shape}")
+    print(f"DEBUG: Feature Names count: {len(FEATURE_NAMES)}")
+    print(f"DEBUG: Rarity of 'icelandic' tag (IDF): {IDF_MAP.get('icelandic', 'NOT FOUND')}")
+
+except AttributeError as e:
+    print(f"Error loading TF-IDF components: {e}")
+    IDF_WEIGHTS = None
+    IDF_MAP = {}
+except FileNotFoundError as e:
+    print(f"Error: Missing model file: {e}")
+    IDF_WEIGHTS = None
+    IDF_MAP = {}
+
 print(f"✓ Loaded model with {len(all_feature_names)} features")
 print(f"✓ Loaded {len(all_artists_df)} artists for recommendations")
 print(f"✓ Behavioral means: {behavioral_means}")
 
 print("\nDebug: Analyzing feature vectors...")
-#checking TF-IDF portion (first 300 features)
 tfidf_nonzero = 0
 for idx, row in all_artists_df.iterrows():
     vec = row['features']
@@ -37,10 +54,8 @@ for idx, row in all_artists_df.iterrows():
 print(f"Artists with non-zero TF-IDF features: {tfidf_nonzero}/{len(all_artists_df)}")
 print(f"Artists with ONLY behavioral features: {len(all_artists_df) - tfidf_nonzero}/{len(all_artists_df)}")
 
-# --- Verify feature count ---
 assert len(all_feature_names) == 307, f"Expected 307 features, got {len(all_feature_names)}"
 # very smart from me, if there's ever more or less it just fails instead of giving me garbage which would cause me to spiral like i've done before. 
-# --- Applying same preproccessing as training ---
 def preprocess_tags(tags: List[str]) -> List[str]:
     cleaned = []
     for tag in tags:
@@ -49,7 +64,6 @@ def preprocess_tags(tags: List[str]) -> List[str]:
             cleaned.append(tag)
     return cleaned
 
-# --- Creating a 307 feature vector for a new artist ---
 def create_feature_vector(artist_tags: List[str]) -> np.ndarray:
     clean_tags = preprocess_tags(artist_tags)
     tag_string = " | ".join(clean_tags) if clean_tags else ""
@@ -65,43 +79,39 @@ def create_feature_vector(artist_tags: List[str]) -> np.ndarray:
         behavioral_means['all_behavioral'],
     ])
     
-# --- Combine: TF-IDF first, then behavioral ---
     full_vector = np.hstack([tfidf_vector, behavioral_features])
     
     assert full_vector.shape[0] == 307, f"Expected 307 features, got {full_vector.shape[0]}"
     
     return full_vector.reshape(1, -1)
 
-
+# won't pretend like I knew what a Tuple was before this project LOLLLLLLLLLLLLL.
 def predict_artist_probability(artist_name: str, artist_tags: List[str]) -> Tuple[float, np.ndarray]:
-    """
-    Predicts the probability (0 to 1) that i'll (otherwise known as "the user") will like the artist    
-    Args:
-        artist_name: Name of the artist
-        artist_tags: List of Last.fm tags for the artist
-        
-    Returns:
-        (probability, feature_vector) tuple
-        - probability: 0.0 to 1.0 (probability of being "Liked")
-        - feature_vector: The 307 element feature vector used for prediction
-    """
     feature_vector = create_feature_vector(artist_tags)
     
-# --- Get prediction probability ---
     probability = final_xgb_model.predict_proba(feature_vector)[0][1]
     
     return probability, feature_vector.flatten()
-# --- Generating artist recs based on what I like ---
 def generate_recommendations(
     new_artist_name: str, 
-    new_artist_tags: List[str], 
+    new_artist_tags: List[str],
+    weighted: bool = True,
     threshold: float = 0.65,
     top_n: int = 10
 ) -> List[Dict]:
 
     probability, new_artist_vector = predict_artist_probability(new_artist_name, new_artist_tags)
+
+    if weighted and IDF_WEIGHTS is not None:
+        tag_vector = new_artist_vector[:300].copy()
+        weight_multiplier = np.zeros_like(tag_vector)
+
+        for i, feature_name in enumerate(FEATURE_NAMES):
+            if tag_vector[i] > 0:
+                weight_multiplier[i] = IDF_MAP.get(feature_name, 1.0)
+        weighted_tag_vector = tag_vector * weight_multiplier
+        new_artist_vector[:300] = weighted_tag_vector
     
-# --- Checking if prediction confidence is high enough ---
     if probability < threshold:
         return [{
             "artist": new_artist_name,
@@ -110,15 +120,16 @@ def generate_recommendations(
             "message": f"Low prediction score ({probability:.2%}). Model is not confident you'll like this artist. Try threshold={threshold:.0%} or higher."
         }]
     
- # --- Filter for "Not Preferred" artists (label == 0), this was a debug that didn't work as planned but still good to have
+ # max playcount for a low history is 5, trying to get some artists that i've listened to a little bit but not enough to be considered a favorite
+    LOW_HISTORY_THRESHOLD = 5 
+
     not_preferred_candidates = all_artists_df[
-       (all_artists_df['label'] == 0) &
-       (all_artists_df['features'].apply(lambda x: np.sum(np.abs(x[:300])) > 0))
-    ].copy()    
-    
+        (all_artists_df['label'] > 0) & 
+        (all_artists_df['label'] < LOW_HISTORY_THRESHOLD) &
+        (all_artists_df['features'].apply(lambda x: np.sum(np.abs(x[:300])) > 0))
+    ].copy()
     recommendations = []
     
-#  --- Calculating similarity for all candidates ---
     for _, row in not_preferred_candidates.iterrows():
         candidate_vector = row['features']
         # skip artists with no tags
@@ -133,17 +144,16 @@ def generate_recommendations(
             vec_a_tags = new_artist_vector[:300]
             vec_b_tags = candidate_vector[:300]
 
-            # Safety check for empty tag vectors
+          
             if np.sum(np.abs(vec_a_tags)) == 0 or np.sum(np.abs(vec_b_tags)) == 0:
                 continue
 
-            # Calculate similarity on Tags only
             similarity = 1 - cosine(vec_a_tags, vec_b_tags)
 
-            # a lot of my return data was nan, this is a really important line for me atm
+            # a lot of my return data was nan, this is a really important line for me atm (didn't know what nan was before)
             if np.isnan(similarity) or np.isinf(similarity):
                 continue
-        # Final score: combine prediction confidence with feature similarity
+
             final_score = probability * similarity
         
             recommendations.append({
@@ -172,8 +182,6 @@ def generate_recommendations(
     print(f"   TF-IDF portion sum: {np.sum(np.abs(new_artist_vector[:300])):.4f}")
     print(f"   Behavioral portion: {new_artist_vector[300:]}")
     
-
- # --- Sorts by final score and return top N ---
     recommendations.sort(key=lambda x: x['final_ranking_score'], reverse=True)
     return recommendations[:top_n]
 
@@ -189,7 +197,6 @@ for idx, row in all_artists_df.iterrows():
 print(f"Total zero-vector artists: {zero_count}/{len(all_artists_df)}")
 # --- Example Usage ---
 if __name__ == "__main__":
-    # Test with one of my recently listened to artists 
     test_artist = "Laufey"
     test_tags = ["jazz", "indie pop", "female vocalists", "icelandic", "bedroom pop"]
     
@@ -198,12 +205,10 @@ if __name__ == "__main__":
     print(f"Tags: {test_tags}")
     print(f"{'='*60}")
     
-    # Get prediction
     prob, features = predict_artist_probability(test_artist, test_tags)
     print(f"\nPrediction: {prob:.2%} probability you'll like this artist")
     print(f"Feature vector shape: {features.shape}")
     
-    # Get recommendations
     print(f"\n{'='*60}")
     print(f"Generating recommendations based on {test_artist}...")
     print(f"{'='*60}")
