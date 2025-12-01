@@ -32,7 +32,7 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 
 **Deployment (Planned):**
 - FastAPI backend
-- React + Tailwind CSS frontend
+- Next.js frontend
 - Redis for caching
 
 ## Current Status 
@@ -59,8 +59,8 @@ Spotify's recommendations are decent, but they're trained on everybody. I want s
 
 **Phase 3: Production** 🚧 IN PRODUCTION!! 
 
-- [ ]  FastAPI backend MVP
-- [ ]  React frontend MVP
+- [X]  FastAPI backend MVP
+- [X]  Next.js frontend MVP
 - [ ]  Model serving endpoint
 - [ ]  Deploy somewhere I can actually use it
       
