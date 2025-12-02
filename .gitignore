@@ -4,4 +4,3 @@ taste_profile_*.json
 listening_history.db
 sync.log
 Spotify Extended Streaming History/
-model_artifacts/

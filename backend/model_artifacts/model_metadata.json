@@ -1,0 +1,30 @@
+{
+  "trained_at": "2025-11-28T20:13:03.489915",
+  "test_accuracy": 0.7619047619047619,
+  "cv_accuracy": 0.7935919760395624,
+  "n_training_samples": 1174,
+  "n_test_samples": 294,
+  "n_features": 307,
+  "best_params": {
+    "gamma": 0.1,
+    "learning_rate": 0.05,
+    "max_depth": 7,
+    "n_estimators": 200
+  },
+  "half_life_days": 90,
+  "quantile_threshold": 0.75,
+  "behavioral_means": {
+    "late_night_ratio": 0.3350900473770116,
+    "weekend_ratio": 0.2816898529811097,
+    "consistency_score": 0.08275772190671644,
+    "consistency_std": 63.975059703868524,
+    "late_weekend_interaction": 0.09538568155519996,
+    "consistency_x_late_night": 0.027606393827065426,
+    "all_behavioral": 0.011052300264279117
+  },
+  "feature_count_breakdown": {
+    "tfidf_tags": 300,
+    "behavioral": 7,
+    "total": 307
+  }
+}
