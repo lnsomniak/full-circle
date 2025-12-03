@@ -96,6 +96,7 @@ Instead of fetching tags for all 2,929 artists (20+ min), sample 500 liked + 500
 - ✅ Hybrid recommendation systems
 - ✅ API design and deployment
 - ✅ Frontend state management
+- 🚧 A better understanding of Frontend as a whole 
 - 🚧 A good understanding of the complex and core libaries of Machine Learning
 - 📋 Model monitoring and retraining
 
