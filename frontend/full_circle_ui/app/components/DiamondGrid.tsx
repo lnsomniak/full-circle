@@ -1,20 +1,19 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const CONFIG = {
   // Grid settings
-  tileSize: 60,           // Size of each diamond in pixels - these are for me
-  gap: 8,                 // Gap between diamonds
+  tileSize: 120,           // Size of each diamond in pixels - these are for me
+  gap: 16,                 // Gap between diamonds
   
   // Interaction settings
-  hoverRadius: 120,       // How close mouse needs to be to trigger flip (pixels)
+  hoverRadius: 100,       // How close mouse needs to be to trigger flip (pixels)
   flipBackDelay: 800,     // How long tile stays flipped after mouse leaves (ms)
   
   // Animation settings  
-  flipDuration: 600,      // How long the flip animation takes (ms)
+  flipDuration: 400,      // How long the flip animation takes (ms)
   
-  // Colors (Spotify palette)
   colors: {
     background: '#121212',
     tileDefault: '#1a1a1a',
@@ -25,10 +24,6 @@ const CONFIG = {
   }
 };
 
-// =============================================================================
-// SAMPLE ALBUM ART - Replace with real Spotify data later!
-// Using placeholder images for now (Phase A = visual only)
-// =============================================================================
 
 const SAMPLE_ALBUMS = [
   'https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg',
@@ -44,9 +39,6 @@ const SAMPLE_ALBUMS = [
   'https://upload.wikimedia.org/wikipedia/en/3/3d/Mon_Laferte_-_1940_Carmen.png', 
   'https://upload.wikimedia.org/wikipedia/en/4/44/Maná_Sueños_Líquidos_cover_small.jpg',
 ]
-// =============================================================================
-// TYPES
-// =============================================================================
 
 interface Tile {
   id: number;
@@ -60,7 +52,7 @@ interface Tile {
 interface SocialLink {
   name: string;
   url: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
 }
 
 const SOCIAL_LINKS: SocialLink[] = [
@@ -101,10 +93,6 @@ const SOCIAL_LINKS: SocialLink[] = [
     ),
   },
 ];
-
-// =============================================================================
-// DIAMOND TILE COMPONENT
-// =============================================================================
 
 interface DiamondTileProps {
   tile: Tile;
@@ -156,9 +144,6 @@ function DiamondTile({ tile, tileSize }: DiamondTileProps) {
   );
 }
 
-// =============================================================================
-// MAIN DIAMOND GRID COMPONENT
-// =============================================================================
 
 export default function DiamondGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -167,7 +152,6 @@ export default function DiamondGrid() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingText, setLoadingText] = useState('Initializing');
 
-  // Loading text animation
   const loadingMessages = [
     'Analyzing your vibe',
     'Consulting the algorithm', 
@@ -244,7 +228,7 @@ export default function DiamondGrid() {
         
         // If mouse is close and tile isn't flipped, flip it
         if (shouldFlip && !tile.isFlipped) {
-          // Clear any existing timeout because this got annoying in testing
+          // clears any existing timeout because this got annoying in testing
           if (tile.flipTimeout) clearTimeout(tile.flipTimeout);
           return { ...tile, isFlipped: true, flipTimeout: null };
         }
@@ -272,7 +256,6 @@ export default function DiamondGrid() {
     );
   }, [mousePos]);
 
-  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
       tiles.forEach(tile => {
@@ -295,9 +278,7 @@ export default function DiamondGrid() {
         ))}
       </div>
 
-      {/* Center Content Overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        {/* Logo/Title */}
         <h1 
           className="text-5xl md:text-7xl font-bold mb-4 pointer-events-auto"
           style={{ 
