@@ -90,3 +90,15 @@ function CallbackContent() {
     </div>
   );
 }
+
+export default function CallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#1DB954] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <CallbackContent />
+    </Suspense>
+  );
+}
