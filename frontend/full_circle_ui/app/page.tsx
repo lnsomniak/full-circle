@@ -1,8 +1,11 @@
 'use client'; 
 
 import { useState } from 'react';
+import DiamondGrid from './components/DiamondGrid';
 
-// Use environment variable for API URL, fallback to localhost for dev
+export default function LoadingPage() {
+  return <DiamondGrid />;
+}
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 export default function Home() {
