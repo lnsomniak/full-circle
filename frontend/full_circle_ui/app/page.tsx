@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { saveFeedback } from '@/lib/supabase';
 import { useSpotify } from '@/lib/spotifycontext';
 import { loginWithSpotify } from '@/lib/spotify';
 import dynamic from 'next/dynamic';
@@ -16,14 +17,35 @@ export default function Home() {
   
   const [artistName, setArtistName] = useState('');
   const [tagsInput, setTagsInput] = useState('');
+  const [ratings, setRatings] = useState<Record<string, 1 | -1>>({});
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [predictionProb, setPredictionProb] = useState<number | null>(null);
   const [isWeighted, setIsWeighted] = useState(true);
+
   const handleAutoFill = (artist: { name: string; genres: string[] }) => {
     setArtistName(artist.name);
     setTagsInput(artist.genres.slice(0, 5).join(', ')); 
+  };
+
+  // MOVED OUTSIDE of handleSubmit
+  const handleFeedback = async (artist: string, rank: number, rating: 1 | -1) => {
+    if (!user) return;
+    
+    setRatings(prev => ({ ...prev, [artist]: rating }));
+    
+    await saveFeedback(user.id, {
+      inputArtist: artistName,
+      inputTags: tagsInput.split(',').map(t => t.trim()),
+      recommendedArtist: artist,
+      recommendationRank: rank,
+      rating: rating,
+      weightedSimilarity: isWeighted,
+      predictionConfidence: predictionProb || 0,
+    });
+    
+    console.log(`✅ Feedback saved: ${artist} = ${rating === 1 ? '👍' : '👎'}`);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,6 +54,7 @@ export default function Home() {
     setError('');
     setRecommendations([]);
     setPredictionProb(null);
+    setRatings({});
 
     const tagsList = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
@@ -68,9 +91,9 @@ export default function Home() {
     }
   };
 
-if (isLoading) {
-  return <DiamondGrid />;
-}
+  if (isLoading) {
+    return <DiamondGrid />;
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center p-8 bg-gray-950 text-gray-100">
@@ -134,10 +157,8 @@ if (isLoading) {
           </div>
         )}
 
-        {/* Main Form */}
         <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-4">
-
             <div>
               <label className="block text-gray-400 mb-1">Artist Name</label>
               <input
@@ -185,6 +206,7 @@ if (isLoading) {
             </button>
           </form>
         </div>
+
         {error && (
           <div className="mt-6 p-4 bg-red-900/50 border border-red-500 rounded text-red-200">
             {error}
@@ -208,16 +230,51 @@ if (isLoading) {
               {recommendations.map((rec, index) => (
                 <div
                   key={index}
-                  className="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-green-500/50 transition flex justify-between items-center"
+                  className="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-green-500/50 transition"
                 >
-                  <div>
-                    <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
-                    <span className="font-semibold text-lg">{rec.artist}</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-gray-400">Score</div>
-                    <div className="font-mono text-green-300">
-                      {rec.final_ranking_score.toFixed(4)}
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
+                      <span className="font-semibold text-lg">{rec.artist}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <div className="text-xs text-gray-400">Score</div>
+                        <div className="font-mono text-green-300">
+                          {rec.final_ranking_score.toFixed(4)}
+                        </div>
+                      </div>
+                      
+                      {user && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleFeedback(rec.artist, index + 1, 1)}
+                            className={`p-2 rounded-full transition ${
+                              ratings[rec.artist] === 1
+                                ? 'bg-green-600 text-white'
+                                : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                            }`}
+                            title="Good recommendation"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleFeedback(rec.artist, index + 1, -1)}
+                            className={`p-2 rounded-full transition ${
+                              ratings[rec.artist] === -1
+                                ? 'bg-red-600 text-white'
+                                : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                            }`}
+                            title="Bad recommendation"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -225,7 +282,6 @@ if (isLoading) {
             </div>
           </div>
         )}
-
       </div>
     </main>
   );

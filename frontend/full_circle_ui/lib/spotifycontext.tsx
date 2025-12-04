@@ -1,5 +1,5 @@
 'use client';
-
+import { saveUser, saveUserArtists } from '@/lib/supabase';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import {
   isLoggedIn,
@@ -42,8 +42,13 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           const userData = await getCurrentUser();
           setUser(userData);
           setIsAuthenticated(true);
+
           const artistsData = await getTopArtists('medium_term', 50);
           setTopArtists(artistsData.items);
+
+          await saveUser(userData)
+          await saveUserArtists(userData.id, artistsData.items, 'medium_term')
+          console.log('✅ User data saved to database')
         } catch (error) {
           console.error('Failed to load user data:', error);
           spotifyLogout();
