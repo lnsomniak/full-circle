@@ -134,7 +134,6 @@ export async function getAccessToken(): Promise<string | null> {
 
   if (!token) return null;
 
-  // Check if token is expired (with 60 second buffer)
   if (expiry && Date.now() > parseInt(expiry) - 60000) {
     try {
       return await refreshAccessToken();
@@ -278,7 +277,7 @@ export interface SpotifyArtist {
   followers: { total: number };
   external_urls: { spotify: string };
 }
-
+/* god typing these out is so boring why would I do this to myself */
 export interface SpotifyTrack {
   id: string;
   name: string;

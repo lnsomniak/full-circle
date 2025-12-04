@@ -245,7 +245,7 @@ export default function DiamondGrid() {
           return { ...tile, flipTimeout: timeout };
         }
         
-        // If mouse came back before timeout, cancel the flip back
+        // if mourse shows up cancel the flip (this was lovely to add)
         if (shouldFlip && tile.flipTimeout) {
           clearTimeout(tile.flipTimeout);
           return { ...tile, flipTimeout: null };
@@ -271,7 +271,6 @@ export default function DiamondGrid() {
       className="fixed inset-0 overflow-hidden cursor-crosshair"
       style={{ backgroundColor: CONFIG.colors.background }}
     >
-      {/* Diamond Grid */}
       <div className="absolute inset-0">
         {tiles.map(tile => (
           <DiamondTile key={tile.id} tile={tile} tileSize={CONFIG.tileSize} />

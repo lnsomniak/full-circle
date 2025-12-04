@@ -1,10 +1,11 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { handleCallback } from '@/lib/spotify';
 /// this took me way too long to figure out i hate spotify i love spotify SPONSER ME GIVE ME AN INTERNSHIP IT IS MORNING. 
-export default function CallbackPage() {
+function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -42,7 +43,7 @@ export default function CallbackPage() {
         setErrorMessage(err instanceof Error ? err.message : 'Failed to complete login');
       }
     };
-
+/// so many error codes becuase once I make this public I need to give myself some backdoor to the issues found all the way in the latest working code
     processCallback();
   }, [searchParams, router]);
 
