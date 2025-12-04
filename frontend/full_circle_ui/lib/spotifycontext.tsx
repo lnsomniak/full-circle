@@ -34,7 +34,9 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
   useEffect(() => {
     const initializeAuth = async () => {
       setIsLoading(true);
-      
+
+       const minDelay = new Promise(resolve => setTimeout(resolve, 2500));
+      // 2.5 second loading time becauase i put a lot of effort into it and this is the average. 
       if (isLoggedIn()) {
         try {
           const userData = await getCurrentUser();
@@ -49,6 +51,11 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
         }
       }
       
+  //red stop sign
+      await minDelay;
+      setIsLoading(false);
+    };
+
       setIsLoading(false);
     };
 

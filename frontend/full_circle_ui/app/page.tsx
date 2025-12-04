@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import { useSpotify } from '@/lib/spotifycontext';
 import { loginWithSpotify } from '@/lib/spotify';
+import dynamic from 'next/dynamic';
+
+const DiamondGrid = dynamic(() => import('./components/DiamondGrid'), {
+  ssr: false,
+});
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -63,13 +68,9 @@ export default function Home() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gray-950">
-        <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
-      </main>
-    );
-  }
+if (isLoading) {
+  return <DiamondGrid />;
+}
 
   return (
     <main className="flex min-h-screen flex-col items-center p-8 bg-gray-950 text-gray-100">
