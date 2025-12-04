@@ -56,9 +56,6 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
       setIsLoading(false);
     };
 
-      setIsLoading(false);
-    };
-
     initializeAuth();
   }, []);
 
