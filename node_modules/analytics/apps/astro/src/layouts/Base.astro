@@ -1,0 +1,26 @@
+---
+import Analytics from '@vercel/analytics/astro';
+
+const { title } = Astro.props;
+---
+
+<script is:inline>
+  function webAnalyticsBeforeSend(data){
+    console.log("Web Analytics before send", data)
+    return data;
+  }
+</script>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+    <Analytics />
+	</head>
+	<body>
+		<slot />
+  </body>
+</html>
