@@ -70,7 +70,6 @@ export async function searchArtists(query: string): Promise<LastFmArtist[]> {
 
     const response = await fetch(`${BASE_URL}?${params}`);
     const data = await response.json();
-
     return data.results?.artistmatches?.artist || [];
   } catch (error) {
     console.error('Last.fm search error:', error);
