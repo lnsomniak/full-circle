@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-
+import { useState, useEffect, useCallback, useRef } from 'react';
+/// i like this more ^
 const CONFIG = {
   // Grid settings
   tileSize: 120,           // Size of each diamond in pixels - these are for me
@@ -146,6 +146,7 @@ function DiamondTile({ tile, tileSize }: DiamondTileProps) {
 
 
 export default function DiamondGrid() {
+  const lastUpdateRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [tiles, setTiles] = useState<Tile[]>([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -206,7 +207,12 @@ export default function DiamondGrid() {
   }, []);
 
   // track mouse position
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const now = Date.now();
+    // please stop kiling my loading screen i am just a mee little boy 
+    if (now - lastUpdateRef.current < 16) return;
+    lastUpdateRef.current = now;
+    
     setMousePos({ x: e.clientX, y: e.clientY });
   }, []);
 
