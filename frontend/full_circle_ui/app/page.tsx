@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getArtistTags } from '@/lib/lastfm';
 import { saveFeedback } from '@/lib/supabase';
 import { useSpotify } from '@/lib/spotifycontext';
 import { loginWithSpotify } from '@/lib/spotify';
@@ -21,6 +22,7 @@ export default function Home() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fetchingTags, setFetchingTags] = useState(false);
   const [predictionProb, setPredictionProb] = useState<number | null>(null);
   const [isWeighted, setIsWeighted] = useState(true);
 
@@ -29,7 +31,6 @@ export default function Home() {
     setTagsInput(artist.genres.slice(0, 5).join(', ')); 
   };
 
-  // MOVED OUTSIDE of handleSubmit
   const handleFeedback = async (artist: string, rank: number, rating: 1 | -1) => {
     if (!user) return;
     
@@ -47,6 +48,22 @@ export default function Home() {
     
     console.log(`✅ Feedback saved: ${artist} = ${rating === 1 ? '👍' : '👎'}`);
   };
+
+  const handleFetchTags = async () => {
+    if (!artistName.trim()) return;
+  
+    setFetchingTags(true);
+    const tags = await getArtistTags(artistName);
+  
+    if (tags.length > 0) {
+      setTagsInput(tags.join(', '));
+      console.log(`✅ Fetched ${tags.length} tags for ${artistName}`);
+    } else {
+      console.log(`⚠️ No tags found for ${artistName}`);
+    }
+  
+    setFetchingTags(false);
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,10 +96,11 @@ export default function Home() {
 
       if (data.message) {
         setError(`Message from Model: ${data.message}`);
-      } else {
-        setPredictionProb(data.prediction_probability);
-        setRecommendations(data.recommendations);
-      }
+    } else {
+      console.log('🏷️ Matching tags check:', data.recommendations[0]?.matching_tags);
+      setPredictionProb(data.prediction_probability);
+      setRecommendations(data.recommendations);
+    }
     } catch (err) {
       setError('Failed to connect to backend. Is uvicorn running? Thought so.');
       console.error(err);
@@ -100,7 +118,7 @@ export default function Home() {
       <div className="z-10 w-full max-w-2xl items-center justify-between font-mono text-sm">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text">
-            FullCircle Recs
+            Full-Circle
           </h1>
           
           {isAuthenticated ? (
@@ -161,14 +179,25 @@ export default function Home() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-gray-400 mb-1">Artist Name</label>
-              <input
-                type="text"
-                value={artistName}
-                onChange={(e) => setArtistName(e.target.value)}
-                placeholder="e.g. Laufey"
-                className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:border-green-500 focus:outline-none transition"
-                required
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={artistName}
+                  onChange={(e) => setArtistName(e.target.value)}
+                  placeholder="e.g. Laufey"
+                  className="flex-1 p-3 rounded bg-gray-800 border border-gray-700 text-white focus:border-green-500 focus:outline-none transition"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleFetchTags}
+                  disabled={!artistName.trim() || fetchingTags}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded transition text-sm font-medium"
+                  title="Auto-fetch tags from Last.fm"
+                >
+                  {fetchingTags ? '...' : '🏷️ Tags'}
+                </button>
+              </div>
             </div>
 
             <div>
@@ -192,7 +221,7 @@ export default function Home() {
                   className="form-checkbox h-5 w-5 text-green-600 rounded border-gray-600 bg-gray-700 transition duration-150 ease-in-out"
                 />
                 <span className="text-sm text-gray-300 select-none">
-                  Enable Weighted Tag Similarity (Prioritizes niche/rare tags)
+                  Enable Weighted Tag Similarity? (Prioritizes niche/rare tags)
                 </span>
               </label>
             </div>
@@ -202,16 +231,10 @@ export default function Home() {
               disabled={loading}
               className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded transition duration-200 disabled:opacity-50"
             >
-              {loading ? 'Analyzing VIBE...' : 'Get Recommendations'}
+              {loading ? 'Please work.' : 'Get Recommendations'}
             </button>
           </form>
         </div>
-
-        {error && (
-          <div className="mt-6 p-4 bg-red-900/50 border border-red-500 rounded text-red-200">
-            {error}
-          </div>
-        )}
 
         {predictionProb !== null && (
           <div className="mt-8">
@@ -239,9 +262,9 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <div className="text-xs text-gray-400">Score</div>
+                        <div className="text-xs text-gray-400">Similarity</div>
                         <div className="font-mono text-green-300">
-                          {rec.final_ranking_score.toFixed(4)}
+                          {(rec.similarity_to_input * 100).toFixed(1)}%
                         </div>
                       </div>
                       
@@ -277,9 +300,31 @@ export default function Home() {
                       )}
                     </div>
                   </div>
+                
+                  {rec.matching_tags && rec.matching_tags.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-gray-800">
+                      <span className="text-xs text-gray-500 mr-2">Matched:</span>
+                      <div className="inline-flex flex-wrap gap-1">
+                        {rec.matching_tags.slice(0, 6).map((tag: string) => (
+                          <span 
+                            key={tag} 
+                            className="px-2 py-0.5 bg-purple-900/50 text-purple-300 text-xs rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-6 p-4 bg-red-900/50 border border-red-500 rounded text-red-200">
+            {error}
           </div>
         )}
       </div>
