@@ -136,14 +136,8 @@ def generate_recommendations(
         if np.sum(np.abs(candidate_vector)) == 0:
             continue
         try:
-            # by the time I push this, I wouldn't be surprised if I already forgot about this strategy I used. 
-            # I was getting some crazy numbers in my prediction results, and it was because my TF-IDF features were being measured in numbers like 0.04, and 0.12
-            # this is in comparison to my behaviorals, which were in numbers like 63.97 etc etc
-            # Normally, you'd think to normalize however I thought that in my problem this wouldn't work since normalizing doesn't separate intent.
-            # By slicing the [:300], I forced the math to look at ONLY the genre tags. Now the vector for Laufey points to Jazz and the vector for Feid points to Reggaeton and the angle between them is wide. 
             vec_a_tags = new_artist_vector[:300]
             vec_b_tags = candidate_vector[:300]
-
           
             if np.sum(np.abs(vec_a_tags)) == 0 or np.sum(np.abs(vec_b_tags)) == 0:
                 continue
@@ -155,12 +149,20 @@ def generate_recommendations(
                 continue
 
             final_score = probability * similarity
-        
+            
+            matching_tags = []
+            for i, feature_name in enumerate(FEATURE_NAMES):
+                if vec_a_tags[i] > 0 and vec_b_tags[i] > 0:
+                    matching_tags.append(feature_name)
+                    
+            matching_tags.sort(key=lambda t: IDF_MAP.get(t, 0), reverse=True)
+
             recommendations.append({
                 'artist': row['artist_name'],
                 'similarity_to_input': float(similarity),
                 'prediction_confidence': float(probability),
                 'final_ranking_score': float(final_score),
+                'matching_tags': matching_tags[:10],  # Top 10 matching tags
             })
         except Exception as e:
             continue
