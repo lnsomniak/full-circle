@@ -135,6 +135,10 @@ def generate_recommendations(
             ~not_preferred_candidates['artist_name'].str.lower().isin(exclude_lower)
     ]
     print(f"Explore Mode: Filtered to {len(not_preferred_candidates)} candidates after excluding {len(exclude_artists)} known artists")
+    
+    not_preferred_candidates = not_preferred_candidates[
+        not_preferred_candidates['artist_name'].str.lower() != new_artist_name.lower()
+    ]
         
     recommendations = []
     
