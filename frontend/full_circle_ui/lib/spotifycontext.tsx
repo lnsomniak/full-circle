@@ -16,7 +16,7 @@ interface SpotifyContextType {
   isLoading: boolean;
   user: SpotifyUser | null;
   topArtists: SpotifyArtist[];
-  topAlbumArts: string[]
+  topAlbumArts: string[];
   logout: () => void;
   refreshData: () => Promise<void>;
 }
@@ -38,30 +38,42 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     const initializeAuth = async () => {
       setIsLoading(true);
 
-       const minDelay = new Promise(resolve => setTimeout(resolve, 5000));
-      // 5 second delay because i am cool and you guys should want to see my loading screen.
+      const minDelay = new Promise(resolve => setTimeout(resolve, 5000)); // 5 seconds though could go up
+
       if (isLoggedIn()) {
         try {
-          const userData = await getCurrentUser();
+          const [userData, artistsData] = await Promise.all([
+            getCurrentUser(),
+            getTopArtists('medium_term', 50)
+          ]);  
+
           setUser(userData);
           setIsAuthenticated(true);
-
-          const artistsData = await getTopArtists('medium_term', 50);
           setTopArtists(artistsData.items);
 
-          const albumArts: string[] = [];
-          for (const artist of artistsData.items.slice(0,10)) {
-            const albums = await getArtistTopAlbums(artist.id);
-            albums.forEach(album => { 
-              if (album.image && albumArts.length < 50) {
-                albumArts.push(album.image);
-              }
-            });
-          }
-          setTopAlbumArts(albumArts);
-          console.log('🎨 Album arts fetched:', albumArts.length, albumArts.slice(0, 3));
+          const albumFetchPromise = (async () => {
+            const albumArts: string[] = [];
 
-          await saveUser(userData);
+            const albumPromises = artistsData.items.slice(0,5).map(artist =>
+              getArtistTopAlbums(artist.id)
+            );
+            const allAlbums = await Promise.all(albumPromises);
+            
+            allAlbums.forEach(albums => {
+              albums.forEach(album => {
+                if (album.image && albumArts.length < 50) {
+                  albumArts.push(album.image);
+                }
+              });
+            });
+            return albumArts;
+          })();
+
+          const albumArts = await albumFetchPromise;
+          setTopAlbumArts(albumArts);
+          console.log ('Album Arts fetched:', albumArts.length);
+
+          saveUser(userData);
           await saveUserArtists(userData.id, artistsData.items, 'medium_term');
           console.log('✅ User data succesfully saved to database!!!!!!!!!!!!!!!!!!!');
         } catch (error) {
@@ -70,8 +82,6 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           setIsAuthenticated(false);
         }
       }
-
-  //red stop sign
       await minDelay;
       setIsLoading(false);
     };
