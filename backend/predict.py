@@ -97,7 +97,8 @@ def generate_recommendations(
     new_artist_tags: List[str],
     weighted: bool = True,
     threshold: float = 0.65,
-    top_n: int = 10
+    top_n: int = 10,
+    exclude_artists: List[str] = []
 ) -> List[Dict]:
 
     probability, new_artist_vector = predict_artist_probability(new_artist_name, new_artist_tags)
@@ -119,8 +120,7 @@ def generate_recommendations(
             "recommendation": False,
             "message": f"Low prediction score ({probability:.2%}). Model is not confident you'll like this artist. Try threshold={threshold:.0%} or higher."
         }]
-    
- # max playcount for a low history is 5, trying to get some artists that i've listened to a little bit but not enough to be considered a favorite
+
     LOW_HISTORY_THRESHOLD = 5 
 
     not_preferred_candidates = all_artists_df[
@@ -128,11 +128,18 @@ def generate_recommendations(
         (all_artists_df['label'] < LOW_HISTORY_THRESHOLD) &
         (all_artists_df['features'].apply(lambda x: np.sum(np.abs(x[:300])) > 0))
     ].copy()
+    
+    if exclude_artists and len(exclude_artists) > 0:
+        exclude_lower = [a.lower() for a in exclude_artists]
+        not_preferred_candidates = not_preferred_candidates[
+            ~not_preferred_candidates['artist_name'].str.lower().isin(exclude_lower)
+    ]
+    print(f"Explore Mode: Filtered to {len(not_preferred_candidates)} candidates after excluding {len(exclude_artists)} known artists")
+        
     recommendations = []
     
     for _, row in not_preferred_candidates.iterrows():
         candidate_vector = row['features']
-        # skip artists with no tags
         if np.sum(np.abs(candidate_vector)) == 0:
             continue
         try:
@@ -143,8 +150,6 @@ def generate_recommendations(
                 continue
 
             similarity = 1 - cosine(vec_a_tags, vec_b_tags)
-
-            # a lot of my return data was nan, this is a really important line for me atm (didn't know what nan was before)
             if np.isnan(similarity) or np.isinf(similarity):
                 continue
 
