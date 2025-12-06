@@ -1,14 +1,8 @@
-
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// =============================================
-// this is a database i'm using supabase for to add storage, postgre, and more. 
-// =============================================
 
 export async function saveUser(spotifyUser: {
   id: string;
@@ -40,8 +34,6 @@ export async function saveUser(spotifyUser: {
   
   return data;
 }
-
-// Save user's top artists
 export async function saveUserArtists(
   userId: string,
   artists: {
@@ -53,7 +45,6 @@ export async function saveUserArtists(
   }[],
   timeRange: 'short_term' | 'medium_term' | 'long_term' = 'medium_term'
 ) {
-  // First get the user's UUID from spotify_id
   const { data: user } = await supabase
     .from('users')
     .select('id')
@@ -84,7 +75,6 @@ export async function saveUserArtists(
   return data;
 }
 
-// Save feedback on a recommendation
 export async function saveFeedback(
   spotifyUserId: string,
   feedback: {
@@ -92,12 +82,11 @@ export async function saveFeedback(
     inputTags: string[];
     recommendedArtist: string;
     recommendationRank: number;
-    rating: 1 | -1; // 1 = thumbs up, -1 = thumbs down
+    rating: 1 | -1; 
     weightedSimilarity: boolean;
     predictionConfidence: number;
   }
 ) {
-  // Get user UUID
   const { data: user } = await supabase
     .from('users')
     .select('id')
@@ -122,8 +111,6 @@ export async function saveFeedback(
   if (error) console.error('Error saving feedback:', error);
   return data;
 }
-
-// Get all feedback for training data export
 export async function getAllFeedback() {
   const { data, error } = await supabase
     .from('feedback')
@@ -135,4 +122,53 @@ export async function getAllFeedback() {
 
   if (error) console.error('Error fetching feedback:', error);
   return data;
+}
+export async function exportFeedbackData(): Promise<{
+  csv: string;
+  count: number;
+}> {
+  const { data, error } = await supabase
+    .from('feedback')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to export feedback:', error);
+    return { csv: '', count: 0 };
+  }
+
+  if (!data || data.length === 0) {
+    return { csv: '', count: 0 };
+  }
+
+// cvv maker with headers to orgnaize 
+  const headers = [
+    'created_at',
+    'input_artist',
+    'input_tags',
+    'recommended_artist',
+    'recommendation_rank',
+    'rating',
+    'weighted_similarity',
+    'prediction_confidence'
+  ];
+
+  const csvRows = [
+    headers.join(','),
+    ...data.map(row => [
+      row.created_at,
+      `"${row.input_artist}"`,
+      `"${row.input_tags?.join(';') || ''}"`,
+      `"${row.recommended_artist}"`,
+      row.recommendation_rank,
+      row.rating,
+      row.weighted_similarity,
+      row.prediction_confidence
+    ].join(','))
+  ];
+
+  return {
+    csv: csvRows.join('\n'),
+    count: data.length
+  };
 }

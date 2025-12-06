@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { getArtistTags } from '@/lib/lastfm';
-import { saveFeedback } from '@/lib/supabase';
+import { saveFeedback, exportFeedbackData} from '@/lib/supabase';
 import { useSpotify } from '@/lib/spotifycontext';
 import { loginWithSpotify, searchSpotifyArtist } from '@/lib/spotify';
 import dynamic from 'next/dynamic';
@@ -25,6 +25,7 @@ export default function Home() {
   const [predictionProb, setPredictionProb] = useState<number | null>(null);
   const [isWeighted, setIsWeighted] = useState(true);
   const [artistImages, setArtistImages] = useState<Record<string, string>>({});
+  const [exploreMode, setExploreMode] = useState(false);
 
   const handleAutoFill = (artist: { name: string; genres: string[] }) => {
     setArtistName(artist.name);
@@ -64,6 +65,25 @@ export default function Home() {
   
     setFetchingTags(false);
 };
+  const handleExportFeedback = async () => {
+    const { csv, count } = await exportFeedbackData();
+    
+    if (count === 0) {
+      alert('No feedback data to export yet!');
+      return;
+    }
+
+    // Download as file
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fullcircle-feedback-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    console.log(`✅ Exported ${count} feedback entries`);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,6 +107,7 @@ export default function Home() {
           artist_name: artistName,
           tags: tagsList,
           weighted_similarity: isWeighted,
+          exclude_artists: exploreMode ? topArtists.map(a => a.name) : [],
         }),
       });
 
@@ -235,7 +256,19 @@ export default function Home() {
                 </span>
               </label>
             </div>
-
+          <div className="pt-2">
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={exploreMode}
+                onChange={(e) => setExploreMode(e.target.checked)}
+                className="form-checkbox h-5 w-5 text-purple-600 rounded border-gray-600 bg-gray-700 transition duration-150 ease-in-out"
+              />
+              <span className="text-sm text-gray-300 select-none">
+                🔮 Explore Mode (Hide artists I already know)
+              </span>
+            </label>
+          </div>
             <button
               type="submit"
               disabled={loading}
@@ -246,112 +279,127 @@ export default function Home() {
           </form>
         </div>
 
-        {predictionProb !== null && (
-          <div className="mt-8">
-            <div className="text-center mb-6">
-              <span className="text-gray-400">Prediction Confidence: </span>
-              <span className="text-2xl font-bold text-green-400">
-                {(predictionProb * 100).toFixed(2)}%
-              </span>
-            </div>
-
+        {user && (
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={handleExportFeedback}
+              className="text-xs text-gray-500 hover:text-gray-300 transition flex items-center gap-1"
+            >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        Export Feedback Data
+      </button>
+      </div>
+    )}
+      {predictionProb !== null && (
+        <div className="mt-8">
+          <div className="text-center mb-6">
+            <span className="text-gray-400">Prediction Confidence: </span>
+            <span className="text-2xl font-bold text-green-400">
+              {(predictionProb * 100).toFixed(2)}%
+            </span>
+          </div>
             <h2 className="text-xl font-bold mb-4 border-b border-gray-800 pb-2">
               Top 10 Recommendations
             </h2>
-
-            <div className="grid gap-4">
-              {recommendations.map((rec, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-green-500/50 transition"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      {artistImages[rec.artist] ? (
-                        <img 
-                          src={artistImages[rec.artist]} 
-                          alt={rec.artist}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
-                          <span className="text-gray-500 text-xs">🎵</span>
-                        </div>
-                      )}
-                      <div>
-                        <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
-                        <span className="font-semibold text-lg">{rec.artist}</span>
+              <div className="grid gap-4">
+                {recommendations.map((rec, index) => (
+              <div
+                key={index}
+                className="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-green-500/50 transition"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    {artistImages[rec.artist] ? (
+                  <img 
+                    src={artistImages[rec.artist]} 
+                    alt={rec.artist}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+            ) : (
+                  <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
+                    <span className="text-gray-500 text-xs">🎵</span>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <div className="text-xs text-gray-400">Similarity</div>
-                        <div className="font-mono text-green-300">
-                          {(rec.similarity_to_input * 100).toFixed(1)}%
-                        </div>
+                    )}
+                  <div>
+                <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
+              <span className="font-semibold text-lg">{rec.artist}</span>
+            </div>
+          </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <div className="text-xs text-gray-400">Similarity</div>
+                      <div className="font-mono text-green-300">
+                        {(rec.similarity_to_input * 100).toFixed(1)}%
                       </div>
-                      
-                      {user && (
+                    </div>   
+                          {user && (
                         <div className="flex gap-2">
-                          <button
-                            onClick={() => handleFeedback(rec.artist, index + 1, 1)}
-                            className={`p-2 rounded-full transition ${
-                              ratings[rec.artist] === 1
-                                ? 'bg-green-600 text-white'
-                                : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-                            }`}
-                            title="Good recommendation"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                            </svg>
-                          </button>
+                      <button
+                    onClick={() => handleFeedback(rec.artist, index + 1, 1)}
+                    className={`p-2 rounded-full transition ${
+                    ratings[rec.artist] === 1
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                  }`}
+                    title="Good recommendation"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                      </svg>
+                        </button>
                           <button
                             onClick={() => handleFeedback(rec.artist, index + 1, -1)}
                             className={`p-2 rounded-full transition ${
                               ratings[rec.artist] === -1
-                                ? 'bg-red-600 text-white'
-                                : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                            ? 'bg-red-600 text-white'
+                            : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
                             }`}
-                            title="Bad recommendation"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
-                            </svg>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* WHY - Matching Tags */}
-                  {rec.matching_tags && rec.matching_tags.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-800">
-                      <span className="text-xs text-gray-500 mr-2">Matched:</span>
-                      <div className="inline-flex flex-wrap gap-1">
-                        {rec.matching_tags.slice(0, 6).map((tag: string) => (
-                          <span 
-                            key={tag} 
-                            className="px-2 py-0.5 bg-purple-900/50 text-purple-300 text-xs rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                              title="Bad recommendation"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                              </svg>
+                            </button>
+                          </div>
+                          )}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="mt-6 p-4 bg-red-900/50 border border-red-500 rounded text-red-200">
-            {error}
-          </div>
-        )}
-      </div>
-    </main>
-  );
-}
+                          {rec.matching_tags && rec.matching_tags.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-gray-800">
+                      <span className="text-xs text-gray-500 mr-2">Matched:</span>
+                    <div className="inline-flex flex-wrap gap-1">
+                  {rec.matching_tags.slice(0, 6).map((tag: string) => (
+                <span 
+                  key={tag} 
+                  className="px-2 py-0.5 bg-purple-900/50 text-purple-300 text-xs rounded"
+                  >
+                  {tag}
+                  </span>
+                ))}
+                  </div>
+                  </div>
+                )}
+                  </div>
+                ))}
+                  </div>
+                  </div>
+                )}
+                {error && (
+                  <div className="mt-6 p-4 bg-red-900/50 border border-red-500 rounded text-red-200">
+                {error}
+                  </div>
+                )}
+                  </div>
+                  </main>
+                );
+                }
+                // I got bored and needed something to do
+///                                      Into the Wild
+///                                       Jon Krakauer 
+///      I'm 30 pages in and i'm already quite amazed. It's a great read! I love his choice of words and his honest storytelling. I know I'm only 30 pages in, however it is extremely nice reading 
+///     a book that is very honset about what it is! It is a detailed story! 
+///
+///
+///
