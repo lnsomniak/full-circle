@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getArtistTags } from '@/lib/lastfm';
 import { saveFeedback } from '@/lib/supabase';
 import { useSpotify } from '@/lib/spotifycontext';
-import { loginWithSpotify } from '@/lib/spotify';
+import { loginWithSpotify, searchSpotifyArtist } from '@/lib/spotify';
 import dynamic from 'next/dynamic';
 
 const DiamondGrid = dynamic(() => import('./components/DiamondGrid'), {
@@ -14,8 +14,7 @@ const DiamondGrid = dynamic(() => import('./components/DiamondGrid'), {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 export default function Home() {
-  const { isAuthenticated, isLoading, user, topArtists, logout } = useSpotify();
-  
+  const {isAuthenticated, isLoading, user, topArtists, topAlbumArts, logout } = useSpotify();
   const [artistName, setArtistName] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [ratings, setRatings] = useState<Record<string, 1 | -1>>({});
@@ -25,6 +24,7 @@ export default function Home() {
   const [fetchingTags, setFetchingTags] = useState(false);
   const [predictionProb, setPredictionProb] = useState<number | null>(null);
   const [isWeighted, setIsWeighted] = useState(true);
+  const [artistImages, setArtistImages] = useState<Record<string, string>>({});
 
   const handleAutoFill = (artist: { name: string; genres: string[] }) => {
     setArtistName(artist.name);
@@ -72,6 +72,8 @@ export default function Home() {
     setRecommendations([]);
     setPredictionProb(null);
     setRatings({});
+    setArtistImages({});
+    
 
     const tagsList = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
@@ -100,6 +102,13 @@ export default function Home() {
       console.log('🏷️ Matching tags check:', data.recommendations[0]?.matching_tags);
       setPredictionProb(data.prediction_probability);
       setRecommendations(data.recommendations);
+
+      data.recommendations.forEach(async (rec: any) => {
+        const artist = await searchSpotifyArtist(rec.artist);
+        if (artist?.image) {
+          setArtistImages(prev => ({ ...prev, [rec.artist]: artist.image! }));
+        }
+      });
     }
     } catch (err) {
       setError('Failed to connect to backend. Is uvicorn running? Thought so.');
@@ -110,7 +119,7 @@ export default function Home() {
   };
 
   if (isLoading) {
-    return <DiamondGrid />;
+    return <DiamondGrid albumArts={topAlbumArts} />;
   }
 
   return (
@@ -256,9 +265,22 @@ export default function Home() {
                   className="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-green-500/50 transition"
                 >
                   <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
-                      <span className="font-semibold text-lg">{rec.artist}</span>
+                    <div className="flex items-center gap-3">
+                      {artistImages[rec.artist] ? (
+                        <img 
+                          src={artistImages[rec.artist]} 
+                          alt={rec.artist}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">🎵</span>
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-green-500 font-bold mr-3">#{index + 1}</span>
+                        <span className="font-semibold text-lg">{rec.artist}</span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
@@ -300,7 +322,8 @@ export default function Home() {
                       )}
                     </div>
                   </div>
-                
+                  
+                  {/* WHY - Matching Tags */}
                   {rec.matching_tags && rec.matching_tags.length > 0 && (
                     <div className="mt-3 pt-3 border-t border-gray-800">
                       <span className="text-xs text-gray-500 mr-2">Matched:</span>

@@ -127,7 +127,73 @@ export async function refreshAccessToken(): Promise<string> {
 
   return data.access_token;
 }
+/**
+ * Search for an artist on Spotify
+ */
+export async function searchSpotifyArtist(artistName: string): Promise<{
+  name: string;
+  image: string | null;
+  id: string;
+} | null> {
+  const token = await getAccessToken();
+  if (!token) return null;
 
+  try {
+    const response = await fetch(
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const artist = data.artists?.items?.[0];
+
+    if (!artist) return null;
+
+    return {
+      name: artist.name,
+      image: artist.images?.[1]?.url || artist.images?.[0]?.url || null,
+      id: artist.id,
+    };
+  } catch (error) {
+    console.error('Spotify search error:', error);
+    return null;
+  }
+}
+
+export async function getArtistTopAlbums(artistId: string): Promise<{
+  name: string;
+  image: string;
+  id: string;
+}[]> {
+  const token = await getAccessToken();
+  if (!token) return [];
+
+  try {
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album&limit=10`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    
+    return data.items?.map((album: any) => ({
+      name: album.name,
+      image: album.images?.[1]?.url || album.images?.[0]?.url || '',
+      id: album.id,
+    })) || [];
+  } catch (error) {
+    console.error('Spotify albums error:', error);
+    return [];
+  }
+}
 export async function getAccessToken(): Promise<string | null> {
   const token = localStorage.getItem('spotify_access_token');
   const expiry = localStorage.getItem('spotify_token_expiry');

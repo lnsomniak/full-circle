@@ -14,6 +14,47 @@ export interface LastFmArtist {
   image?: { '#text': string; size: string }[];
 }
 
+
+/**
+ * NO MORE WIKI
+ */
+export async function getArtistInfo(artistName: string): Promise<{
+  name: string;
+  image: string | null;
+  listeners: number;
+  url: string;
+} | null> {
+  try {
+    const params = new URLSearchParams({
+      method: 'artist.getinfo',
+      artist: artistName,
+      api_key: LASTFM_API_KEY || '',
+      format: 'json',
+    });
+
+    const response = await fetch(`${BASE_URL}?${params}`);
+    
+    if (!response.ok) return null;
+
+    const data = await response.json();
+
+    if (data.error) return null;
+
+    const artist = data.artist;
+    const images = artist.image || [];
+    const largeImage = images.find((img: any) => img.size === 'large') || images[images.length - 1];
+
+    return {
+      name: artist.name,
+      image: largeImage?.['#text'] || null,
+      listeners: parseInt(artist.stats?.listeners || '0'),
+      url: artist.url,
+    };
+  } catch (error) {
+    console.error('Last.fm artist info error:', error);
+    return null;
+  }
+}
 /**
  * these next lines just mean I can finally use the lastfm api I worked so hard for, i'll probably limit test it
  */
