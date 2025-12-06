@@ -119,6 +119,7 @@ export default function Home() {
   };
 
   if (isLoading) {
+    console.log('🎨 Passing to DiamondGrid:', topAlbumArts.length);
     return <DiamondGrid albumArts={topAlbumArts} />;
   }
 
