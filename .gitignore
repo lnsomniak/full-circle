@@ -4,3 +4,6 @@ taste_profile_*.json
 listening_history.db
 sync.log
 Spotify Extended Streaming History/
+
+# demo review and handoff state (contains approved data drafts)
+.vibe-wise/
