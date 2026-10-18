@@ -74,3 +74,40 @@ describe("startBridge", () => {
     expect(post).not.toHaveBeenCalled();
   });
 });
+
+
+const palette = { background: "#1e2530", surface: "#232c39", line: "#333941", ink: "#f2ecd8", muted: "#888984", accent: "#c4543a" };
+const spread = { source: "sh-portfolio", type: "theme", mode: "dark", themeId: "slate", name: "Slate", palette };
+
+describe("a spread Nexus theme", () => {
+  it("carries the palette when all six colours are valid", () => {
+    expect(readParentMessage(message({ data: spread }), parent)).toEqual({ type: "theme", mode: "dark", palette });
+  });
+
+  it("falls back to the plain mode when the palette is malformed", () => {
+    for (const bad of [{ ...palette, accent: "red" }, { ...palette, ink: undefined }, "slate", null]) {
+      expect(readParentMessage(message({ data: { ...spread, palette: bad } }), parent)).toEqual({ type: "theme", mode: "dark" });
+    }
+  });
+
+  it("is refused without a valid mode, palette or not", () => {
+    expect(readParentMessage(message({ data: { ...spread, mode: "sepia" } }), parent)).toBeNull();
+  });
+
+  it("is refused from another origin or a stranger", () => {
+    expect(readParentMessage(message({ origin: "https://evil.example", data: spread }), parent)).toBeNull();
+    expect(readParentMessage(message({ source: stranger, data: spread }), parent)).toBeNull();
+  });
+
+  it("reaches onTheme with the palette, or with null for a plain mode", () => {
+    vi.spyOn(window, "postMessage").mockImplementation(() => {});
+    const onTheme = vi.fn();
+    const stop = startBridge({ onTheme, onReset: vi.fn() });
+    window.dispatchEvent(new MessageEvent("message", { origin: location.origin, source: window, data: spread }));
+    window.dispatchEvent(new MessageEvent("message", { origin: location.origin, source: window, data: good }));
+    stop();
+    expect(onTheme).toHaveBeenNthCalledWith(1, "dark", palette);
+    expect(onTheme).toHaveBeenNthCalledWith(2, "dark", null);
+    vi.restoreAllMocks();
+  });
+});

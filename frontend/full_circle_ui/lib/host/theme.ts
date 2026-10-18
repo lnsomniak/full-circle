@@ -1,3 +1,5 @@
+import { deriveVars, PALETTE_VARS, type Palette } from "./palette";
+
 export type ThemeMode = "light" | "dark";
 
 export function isThemeMode(value: unknown): value is ThemeMode {
@@ -23,8 +25,14 @@ export function initialTheme(): ThemeMode {
   return readStoredTheme() ?? osTheme();
 }
 
-export function applyTheme(mode: ThemeMode): void {
-  document.documentElement.setAttribute("data-theme", mode);
+/** Sets the mode, and the spread palette's tokens when there is one; with none, the demo's own tokens show. */
+export function applyTheme(mode: ThemeMode, palette: Palette | null = null): void {
+  const root = document.documentElement;
+  for (const name of PALETTE_VARS) root.style.removeProperty(name);
+  if (palette) {
+    for (const [name, value] of Object.entries(deriveVars(palette))) root.style.setProperty(name, value);
+  }
+  root.setAttribute("data-theme", mode);
 }
 
 /** Opened on its own with no saved pick, the page follows the OS live. */

@@ -18,7 +18,7 @@ function Recommender({ lang }: { lang: Lang }) {
     <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-mono text-sm text-ink">
       <div className="grid w-full max-w-[1100px] grid-cols-[280px_minmax(0,1fr)] gap-6">
         <section>
-          <h1 className="mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-4xl font-bold text-transparent">
+          <h1 className="mb-4 title-gradient bg-clip-text text-4xl font-bold text-transparent">
             {t(lang, "title")}
           </h1>
 
@@ -32,7 +32,7 @@ function Recommender({ lang }: { lang: Lang }) {
                   aria-pressed={i === seedIndex}
                   onClick={() => setSeedIndex(i)}
                   className={`rounded-full px-3 py-1.5 text-sm transition ${
-                    i === seedIndex ? "bg-seed-on text-seed-on-ink" : "bg-field text-ink hover:bg-line"
+                    i === seedIndex ? "bg-accent text-accent-ink" : "bg-field text-ink hover:bg-line"
                   }`}
                 >
                   {s.seed}
@@ -83,7 +83,7 @@ function Recommender({ lang }: { lang: Lang }) {
             <h2 className="text-xl font-bold">{t(lang, "topTen")}</h2>
             <p>
               <span className="text-ink-dim">{t(lang, "confidence")}</span>
-              <span className="text-2xl font-bold text-accent">{(seed.probability * 100).toFixed(2)}%</span>
+              <span className="text-2xl font-bold text-accent-text">{(seed.probability * 100).toFixed(2)}%</span>
             </p>
           </div>
 
@@ -100,7 +100,7 @@ function Recommender({ lang }: { lang: Lang }) {
                 key={rec.artist}
                 className="grid grid-cols-[2rem_11rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 rounded-lg border border-line bg-panel px-3 py-1.5"
               >
-                <span className="font-bold text-accent">#{rec.rank}</span>
+                <span className="font-bold text-accent-text">#{rec.rank}</span>
                 <span className="truncate font-semibold">{rec.artist}</span>
                 <span className="flex flex-wrap gap-1">
                   {rec.matching_tags.map((tag) => (
@@ -122,6 +122,9 @@ function Recommender({ lang }: { lang: Lang }) {
   );
 }
 
+// Only for a host that never sends a theme: show the saved mode instead of a blank frame.
+const HOST_THEME_WAIT_MS = 1500;
+
 // The language is fixed for the life of the page; the server render has no storage to read.
 const noSubscription = () => () => {};
 const serverLang = (): Lang => "en";
@@ -130,16 +133,25 @@ export default function Demo() {
   const [resets, setResets] = useState(0);
   const lang = useSyncExternalStore(noSubscription, readLang, serverLang);
 
-  // Runs before first paint. Until it applies a theme, globals.css keeps the page hidden.
+  // Runs before first paint. Until a theme is applied, globals.css keeps the page hidden.
+  // Embedded, the portfolio's first message (which may carry a Nexus palette) is that theme,
+  // so the saved mode is not painted ahead of it.
   useLayoutEffect(() => {
-    applyTheme(initialTheme());
+    const embedded = window.parent !== window;
+    if (!embedded) applyTheme(initialTheme());
     document.documentElement.lang = readLang();
     if (readFlags(location.search).still) document.documentElement.setAttribute("data-still", "");
     const stopBridge = startBridge({ onTheme: applyTheme, onReset: () => setResets((n) => n + 1) });
     const stopOs = followOsWhileUnsaved(applyTheme);
+    const hostSilent = embedded
+      ? window.setTimeout(() => {
+          if (!document.documentElement.hasAttribute("data-theme")) applyTheme(initialTheme());
+        }, HOST_THEME_WAIT_MS)
+      : undefined;
     return () => {
       stopBridge();
       stopOs();
+      window.clearTimeout(hostSilent);
     };
   }, []);
 

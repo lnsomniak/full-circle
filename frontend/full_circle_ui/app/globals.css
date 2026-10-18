@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* The demo's own palette. A spread Nexus theme overrides these inline on <html> (lib/host/palette.ts). */
 :root {
   --ground: #030712;
   --panel: #111827;
@@ -7,12 +8,14 @@
   --field: #1f2937;
   --ink: #f3f4f6;
   --ink-dim: #9ca3af;
-  --accent: #4ade80;
+  --accent: #16a34a;
+  --accent-text: #4ade80;
   --accent-soft: #86efac;
+  --accent-ink: #ffffff;
   --tag: rgb(88 28 135 / 0.5);
   --tag-ink: #d8b4fe;
-  --seed-on: #16a34a;
-  --seed-on-ink: #ffffff;
+  --grad-from: #4ade80;
+  --grad-to: #3b82f6;
 }
 
 [data-theme="light"] {
@@ -23,11 +26,13 @@
   --ink: #111827;
   --ink-dim: #4b5563;
   --accent: #15803d;
+  --accent-text: #15803d;
   --accent-soft: #166534;
+  --accent-ink: #ffffff;
   --tag: #f3e8ff;
   --tag-ink: #6b21a8;
-  --seed-on: #15803d;
-  --seed-on-ink: #ffffff;
+  --grad-from: #16a34a;
+  --grad-to: #2563eb;
   color-scheme: light;
 }
 
@@ -43,11 +48,11 @@
   --color-ink: var(--ink);
   --color-ink-dim: var(--ink-dim);
   --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
   --color-tag: var(--tag);
   --color-tag-ink: var(--tag-ink);
-  --color-seed-on: var(--seed-on);
-  --color-seed-on-ink: var(--seed-on-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -56,6 +61,14 @@ body {
   background: var(--ground);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.title-gradient {
+  background-image: linear-gradient(to right, var(--grad-from), var(--grad-to));
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
 }
 
 /* No flash: the page stays hidden until a theme has been applied to <html>. */
