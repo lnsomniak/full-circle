@@ -56,7 +56,7 @@ export function contrast(a: string, b: string): number {
 }
 
 /** Moves `color` toward `toward` in 5% steps until it reads at `min` on every background. */
-function readable(color: string, backgrounds: string[], toward: string, min = MIN_TEXT_CONTRAST): string {
+export function readable(color: string, backgrounds: string[], toward: string, min = MIN_TEXT_CONTRAST): string {
   for (let keep = 100; keep >= 0; keep -= 5) {
     const candidate = mix(color, toward, keep);
     if (backgrounds.every((bg) => contrast(candidate, bg) >= min)) return candidate;
