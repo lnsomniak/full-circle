@@ -179,7 +179,7 @@ html[data-still] .tile {
 }
 
 .grid-scrim {
-  background: radial-gradient(ellipse 34rem 15rem at center, var(--ground) 0%, color-mix(in srgb, var(--ground) 88%, transparent) 55%, transparent 100%);
+  background: radial-gradient(ellipse 34rem 17rem at center, var(--ground) 0%, color-mix(in srgb, var(--ground) 88%, transparent) 55%, transparent 100%);
 }
 
 .grid-title {

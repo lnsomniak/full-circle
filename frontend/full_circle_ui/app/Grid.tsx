@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { t } from "@/lib/copy";
+import { CARDS } from "@/lib/cards";
 import { COVER_SPECS } from "@/lib/cover-specs";
-import { coverSvg } from "@/lib/covers";
 import { DATA } from "@/lib/data";
 import { assignArtists, GRID, layoutTiles, MOVE_KEYS, moveFocus, tilesInRadius, waveDelays, type MoveKey, type Rect } from "@/lib/grid";
 import type { Lang } from "@/lib/host/lang";
+import Links from "./Links";
 
-// Built from our own specs, with names escaped in coverSvg, so inserting them as markup is safe.
-const CARDS = COVER_SPECS.map((spec) => coverSvg(spec));
+// CARDS is built from our own specs, with names escaped in coverSvg, so inserting it as markup is safe.
 const SEEDS = DATA.seeds.length;
 const LINES = ["line1", "line2", "line3", "line4", "line5"] as const;
 // Four changes by 4.8 s: nothing updates by itself for more than 5 s (WCAG 2.2.2).
@@ -252,11 +252,14 @@ export default function Grid({ lang, calm, onPick }: { lang: Lang; calm: boolean
             </button>
           ))}
         </div>
+        <p className="grid-caption max-w-md rounded px-3 py-1 text-xs text-ink-dim">{t(lang, "coversNote")}</p>
       </div>
 
       <p aria-live="polite" className="grid-caption pointer-events-none absolute bottom-16 left-1/2 max-w-[90%] -translate-x-1/2 rounded px-3 py-1 text-center text-sm text-ink empty:hidden">
         {caption === null ? "" : `${COVER_SPECS[caption].artist} · ${t(lang, caption < SEEDS ? "seedHint" : "recHint")}`}
       </p>
+
+      <Links lang={lang} className="grid-caption absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full px-4 py-2" />
 
       {!calm && (
         <button

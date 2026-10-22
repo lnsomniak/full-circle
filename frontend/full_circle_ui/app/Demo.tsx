@@ -1,37 +1,53 @@
 ﻿"use client";
 
-import { useLayoutEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { t } from "@/lib/copy";
+import { paletteOf } from "@/lib/cards";
 import { DATA } from "@/lib/data";
 import { startBridge } from "@/lib/host/bridge";
 import { useCalm } from "@/lib/host/calm";
 import { readFlags } from "@/lib/host/flags";
+import { useGroundInk } from "@/lib/host/groundInk";
 import { readLang, type Lang } from "@/lib/host/lang";
 import { applyTheme, followOsWhileUnsaved, initialTheme } from "@/lib/host/theme";
+import { sendAmbient, sendTint } from "@/lib/host/siteEffects";
 import { applyTypefaces } from "@/lib/host/typefaces";
+import { tintFor } from "@/lib/tint";
+import { titleStops } from "@/lib/titleGradient";
+import { Card, Strip } from "./Cover";
 import Grid from "./Grid";
+import Links from "./Links";
 
 function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedIndex: number; onSeed: (index: number) => void; onBack: () => void }) {
   const [isWeighted, setIsWeighted] = useState(true);
   const seed = DATA.seeds[seedIndex];
   const recommendations = isWeighted ? seed.weighted : seed.unweighted;
+  const { ground, ink } = useGroundInk();
+  const [gradFrom, gradTo] = titleStops(paletteOf(seed.seed), ground, ink);
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-label text-sm text-ink">
-      <div className="grid w-full max-w-[1100px] grid-cols-[280px_minmax(0,1fr)] gap-6">
+      <div className="grid w-full max-w-[1100px] grid-cols-[264px_minmax(0,1fr)] gap-5">
         <section>
-          <button
-            type="button"
-            onClick={onBack}
-            className="mb-3 rounded-full bg-field px-3 py-1 text-ink transition hover:bg-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
-          >
-            {t(lang, "back")}
-          </button>
-          <h1 className="title-gradient mb-4 bg-clip-text font-voice text-4xl text-transparent">{t(lang, "title")}</h1>
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h1
+              className="title-gradient whitespace-nowrap bg-clip-text font-voice text-2xl text-transparent"
+              style={{ "--grad-from": gradFrom, "--grad-to": gradTo } as CSSProperties}
+            >
+              {t(lang, "title")}
+            </h1>
+            <button
+              type="button"
+              onClick={onBack}
+              className="whitespace-nowrap rounded-full bg-field px-3 py-1 text-ink transition hover:bg-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
+            >
+              {t(lang, "back")}
+            </button>
+          </div>
 
           <div className="rounded-xl border border-line bg-panel p-4 shadow-2xl">
             <p className="mb-3 text-ink-dim">{t(lang, "seeds")}</p>
-            <div className="mb-5 flex flex-wrap gap-2">
+            <div className="mb-4 flex flex-wrap gap-2">
               {DATA.seeds.map((s, i) => (
                 <button
                   key={s.seed}
@@ -48,16 +64,19 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
             </div>
 
             <div className="space-y-4">
-              <div>
-                <label htmlFor="artist" className="mb-1 block text-ink-dim">
-                  {t(lang, "artistName")}
-                </label>
-                <input
-                  id="artist"
-                  readOnly
-                  value={seed.seed}
-                  className="w-full rounded border border-line bg-field p-2 text-ink focus:outline-none"
-                />
+              <div className="flex gap-3">
+                <Card artist={seed.seed} className="block w-20 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <label htmlFor="artist" className="mb-1 block text-ink-dim">
+                    {t(lang, "artistName")}
+                  </label>
+                  <input
+                    id="artist"
+                    readOnly
+                    value={seed.seed}
+                    className="w-full rounded border border-line bg-field p-2 text-ink focus:outline-none"
+                  />
+                </div>
               </div>
               <div>
                 <label htmlFor="tags" className="mb-1 block text-ink-dim">
@@ -93,7 +112,8 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
             </p>
           </div>
 
-          <div className="mb-1 grid grid-cols-[2rem_11rem_minmax(0,1fr)_4.5rem] gap-2.5 px-3 text-xs text-ink-dim">
+          <div className="mb-1 grid grid-cols-[1.75rem_3rem_9.5rem_minmax(0,1fr)_4rem] gap-2.5 px-3 text-xs text-ink-dim">
+            <span />
             <span />
             <span />
             <span>{t(lang, "matched")}</span>
@@ -104,13 +124,16 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
             {recommendations.map((rec) => (
               <li
                 key={rec.artist}
-                className="grid grid-cols-[2rem_11rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 rounded-lg border border-line bg-panel px-3 py-1.5"
+                className="grid grid-cols-[1.75rem_3rem_9.5rem_minmax(0,1fr)_4rem] items-center gap-2.5 rounded-lg border border-line bg-panel px-3 py-1.5"
               >
                 <span className="text-accent-text">#{rec.rank}</span>
-                <span className="truncate font-voice text-base">{rec.artist}</span>
+                <Strip palette={paletteOf(rec.artist)} className="h-5" />
+                <span className="truncate font-voice text-base" title={rec.artist}>
+                  {rec.artist}
+                </span>
                 <span className="flex flex-wrap gap-1">
                   {rec.matching_tags.map((tag) => (
-                    <span key={tag} className="rounded bg-tag px-2 py-0.5 text-xs text-tag-ink">
+                    <span key={tag} className="rounded bg-tag px-1.5 py-0.5 text-[11px] text-tag-ink">
                       {tag}
                     </span>
                   ))}
@@ -121,9 +144,15 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
           </ol>
         </section>
       </div>
-      <p className="mt-3 w-full max-w-[1100px] text-xs text-ink-dim">
-        {t(lang, "precomputed")} {t(lang, "accuracy")}: {(DATA.model.test_accuracy * 100).toFixed(1)}%.
-      </p>
+      <div className="mt-3 flex w-full max-w-[1100px] items-end justify-between gap-6">
+        <div className="space-y-1 text-xs text-ink-dim">
+          <p>
+            {t(lang, "precomputed")} {t(lang, "accuracy")}: {(DATA.model.test_accuracy * 100).toFixed(1)}%.
+          </p>
+          <p>{t(lang, "coversNote")}</p>
+        </div>
+        <Links lang={lang} className="shrink-0" />
+      </div>
     </main>
   );
 }
@@ -153,16 +182,21 @@ export default function Demo() {
       onTheme: (mode, palette, typefaces) => {
         applyTheme(mode, palette);
         applyTypefaces(typefaces);
+        window.requestAnimationFrame(() => sendAmbient());
       },
       onReset: () => {
         setSeed(null);
         setResets((n) => n + 1);
+        sendTint(null);
+        window.requestAnimationFrame(() => sendAmbient());
       },
     });
     const stopOs = followOsWhileUnsaved(applyTheme);
     const hostSilent = embedded
       ? window.setTimeout(() => {
-          if (!document.documentElement.hasAttribute("data-theme")) applyTheme(initialTheme());
+          if (document.documentElement.hasAttribute("data-theme")) return;
+          applyTheme(initialTheme());
+          window.requestAnimationFrame(() => sendAmbient());
         }, HOST_THEME_WAIT_MS)
       : undefined;
     return () => {
@@ -171,6 +205,10 @@ export default function Demo() {
       window.clearTimeout(hostSilent);
     };
   }, []);
+
+  useEffect(() => {
+    sendTint(seed === null ? null : tintFor(paletteOf(DATA.seeds[seed].seed)));
+  }, [seed]);
 
   if (seed === null) return <Grid key={resets} lang={lang} calm={calm} onPick={setSeed} />;
   return <Recommender key={resets} lang={lang} seedIndex={seed} onSeed={setSeed} onBack={() => setSeed(null)} />;

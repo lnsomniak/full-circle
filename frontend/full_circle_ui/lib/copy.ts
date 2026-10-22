@@ -42,6 +42,13 @@ export const COPY = {
   },
   recHint: { en: "Recommended artist.", es: "Artista recomendado.", ph: "both" },
   back: { en: "Back to grid", es: "Volver a la cuadrícula", ph: "both" },
+  links: { en: "Links", es: "Enlaces", ph: "both" },
+  newTab: { en: "(opens in a new tab)", es: "(se abre en una pestaña nueva)", ph: "both" },
+  coversNote: {
+    en: "Covers here are original colour cards. Real album art belongs to its artists and labels, so the demo shows each artist's palette instead.",
+    es: "Aquí las portadas son tarjetas de color originales. El arte real de los álbumes pertenece a sus artistas y sellos, así que la demo muestra la paleta de cada artista.",
+    ph: "both",
+  },
   seeds: { en: "Seed artists", es: "Artistas semilla", ph: "both" },
   accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "both" },
   precomputed: {
