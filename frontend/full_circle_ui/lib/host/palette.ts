@@ -89,17 +89,22 @@ export const PALETTE_VARS = [
   "--grad-to",
 ] as const;
 
+/** FullCircle's own accent and tag hue. A spread theme does not replace them (Sergio, 2026-10-19). */
+export const GREEN = "#1db954";
+const PURPLE = "#9333ea";
+
 /**
- * Maps the palette onto the demo's tokens. Fills take the palette's colours as sent;
- * every colour used as text is moved toward the ink until it reads (4.5:1) on the
- * ground and the panel, because a spread theme's muted and accent need not.
- * Nothing here depends on light or dark: the palette already is one or the other.
+ * Maps the palette onto the demo's tokens. Ground, surfaces, lines and ink take the palette's
+ * colours as sent; the accent stays FullCircle's green and the tags its purple, so the palette's
+ * own accent is not used. Every colour used as text is moved toward the ink until it reads
+ * (4.5:1) on the ground and the panel, because a spread theme's muted need not, and green does
+ * not on a light ground. Nothing here depends on light or dark: the palette already is one or the other.
  */
 export function deriveVars(p: Palette): Record<(typeof PALETTE_VARS)[number], string> {
   const onGroundAndPanel = [p.background, p.surface];
-  const accentText = readable(p.accent, onGroundAndPanel, p.ink);
+  const accentText = readable(GREEN, onGroundAndPanel, p.ink);
   const accentSoft = readable(mix(accentText, p.ink, 75), onGroundAndPanel, p.ink);
-  const tag = mix(p.accent, p.surface, 16);
+  const tag = mix(PURPLE, p.surface, 16);
   return {
     "--ground": p.background,
     "--panel": p.surface,
@@ -107,12 +112,12 @@ export function deriveVars(p: Palette): Record<(typeof PALETTE_VARS)[number], st
     "--field": mix(p.line, p.surface, 60),
     "--ink": p.ink,
     "--ink-dim": readable(p.muted, onGroundAndPanel, p.ink),
-    "--accent": p.accent,
+    "--accent": GREEN,
     "--accent-text": accentText,
     "--accent-soft": accentSoft,
-    "--accent-ink": inkOn(p.accent, p.background, p.ink),
+    "--accent-ink": inkOn(GREEN, p.background, p.ink),
     "--tag": tag,
-    "--tag-ink": readable(p.accent, [tag], p.ink),
+    "--tag-ink": readable(PURPLE, [tag], p.ink),
     "--grad-from": accentText,
     "--grad-to": accentSoft,
   };

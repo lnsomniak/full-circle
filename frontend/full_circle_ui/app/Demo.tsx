@@ -4,23 +4,30 @@ import { useLayoutEffect, useState, useSyncExternalStore } from "react";
 import { t } from "@/lib/copy";
 import { DATA } from "@/lib/data";
 import { startBridge } from "@/lib/host/bridge";
+import { useCalm } from "@/lib/host/calm";
 import { readFlags } from "@/lib/host/flags";
 import { readLang, type Lang } from "@/lib/host/lang";
 import { applyTheme, followOsWhileUnsaved, initialTheme } from "@/lib/host/theme";
+import { applyTypefaces } from "@/lib/host/typefaces";
+import Grid from "./Grid";
 
-function Recommender({ lang }: { lang: Lang }) {
-  const [seedIndex, setSeedIndex] = useState(0);
+function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedIndex: number; onSeed: (index: number) => void; onBack: () => void }) {
   const [isWeighted, setIsWeighted] = useState(true);
   const seed = DATA.seeds[seedIndex];
   const recommendations = isWeighted ? seed.weighted : seed.unweighted;
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-mono text-sm text-ink">
+    <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-label text-sm text-ink">
       <div className="grid w-full max-w-[1100px] grid-cols-[280px_minmax(0,1fr)] gap-6">
         <section>
-          <h1 className="mb-4 title-gradient bg-clip-text text-4xl font-bold text-transparent">
-            {t(lang, "title")}
-          </h1>
+          <button
+            type="button"
+            onClick={onBack}
+            className="mb-3 rounded-full bg-field px-3 py-1 text-ink transition hover:bg-line focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
+          >
+            {t(lang, "back")}
+          </button>
+          <h1 className="title-gradient mb-4 bg-clip-text font-voice text-4xl text-transparent">{t(lang, "title")}</h1>
 
           <div className="rounded-xl border border-line bg-panel p-4 shadow-2xl">
             <p className="mb-3 text-ink-dim">{t(lang, "seeds")}</p>
@@ -30,7 +37,7 @@ function Recommender({ lang }: { lang: Lang }) {
                   key={s.seed}
                   type="button"
                   aria-pressed={i === seedIndex}
-                  onClick={() => setSeedIndex(i)}
+                  onClick={() => onSeed(i)}
                   className={`rounded-full px-3 py-1.5 text-sm transition ${
                     i === seedIndex ? "bg-accent text-accent-ink" : "bg-field text-ink hover:bg-line"
                   }`}
@@ -75,15 +82,14 @@ function Recommender({ lang }: { lang: Lang }) {
               </label>
             </div>
           </div>
-
         </section>
 
         <section>
           <div className="mb-3 flex items-baseline justify-between border-b border-line pb-2">
-            <h2 className="text-xl font-bold">{t(lang, "topTen")}</h2>
+            <h2 className="font-voice text-xl">{t(lang, "topTen")}</h2>
             <p>
               <span className="text-ink-dim">{t(lang, "confidence")}</span>
-              <span className="text-2xl font-bold text-accent-text">{(seed.probability * 100).toFixed(2)}%</span>
+              <span className="text-2xl text-accent-text">{(seed.probability * 100).toFixed(2)}%</span>
             </p>
           </div>
 
@@ -100,8 +106,8 @@ function Recommender({ lang }: { lang: Lang }) {
                 key={rec.artist}
                 className="grid grid-cols-[2rem_11rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 rounded-lg border border-line bg-panel px-3 py-1.5"
               >
-                <span className="font-bold text-accent-text">#{rec.rank}</span>
-                <span className="truncate font-semibold">{rec.artist}</span>
+                <span className="text-accent-text">#{rec.rank}</span>
+                <span className="truncate font-voice text-base">{rec.artist}</span>
                 <span className="flex flex-wrap gap-1">
                   {rec.matching_tags.map((tag) => (
                     <span key={tag} className="rounded bg-tag px-2 py-0.5 text-xs text-tag-ink">
@@ -109,7 +115,7 @@ function Recommender({ lang }: { lang: Lang }) {
                     </span>
                   ))}
                 </span>
-                <span className="text-right font-mono text-accent-soft">{(rec.similarity * 100).toFixed(1)}%</span>
+                <span className="text-right text-accent-soft">{(rec.similarity * 100).toFixed(1)}%</span>
               </li>
             ))}
           </ol>
@@ -131,7 +137,9 @@ const serverLang = (): Lang => "en";
 
 export default function Demo() {
   const [resets, setResets] = useState(0);
+  const [seed, setSeed] = useState<number | null>(null);
   const lang = useSyncExternalStore(noSubscription, readLang, serverLang);
+  const calm = useCalm();
 
   // Runs before first paint. Until a theme is applied, globals.css keeps the page hidden.
   // Embedded, the portfolio's first message (which may carry a Nexus palette) is that theme,
@@ -141,7 +149,16 @@ export default function Demo() {
     if (!embedded) applyTheme(initialTheme());
     document.documentElement.lang = readLang();
     if (readFlags(location.search).still) document.documentElement.setAttribute("data-still", "");
-    const stopBridge = startBridge({ onTheme: applyTheme, onReset: () => setResets((n) => n + 1) });
+    const stopBridge = startBridge({
+      onTheme: (mode, palette, typefaces) => {
+        applyTheme(mode, palette);
+        applyTypefaces(typefaces);
+      },
+      onReset: () => {
+        setSeed(null);
+        setResets((n) => n + 1);
+      },
+    });
     const stopOs = followOsWhileUnsaved(applyTheme);
     const hostSilent = embedded
       ? window.setTimeout(() => {
@@ -155,5 +172,6 @@ export default function Demo() {
     };
   }, []);
 
-  return <Recommender key={resets} lang={lang} />;
+  if (seed === null) return <Grid key={resets} lang={lang} calm={calm} onPick={setSeed} />;
+  return <Recommender key={resets} lang={lang} seedIndex={seed} onSeed={setSeed} onBack={() => setSeed(null)} />;
 }

@@ -39,14 +39,25 @@ describe("copy", () => {
   it("flags every Spanish string and the new English labels as placeholders", () => {
     expect(placeholders("es").sort()).toEqual(
       Object.keys(COPY)
-        .filter((k) => k !== "title")
+        .filter((k) => k !== "title" && k !== "gridTitle")
         .sort(),
     );
-    expect(placeholders("en").sort()).toEqual(["accuracy", "precomputed", "seeds"]);
+    expect(placeholders("en").sort()).toEqual(["accuracy", "back", "precomputed", "recHint", "ripple", "seedHint", "seeds", "tilesLabel"]);
   });
 
   it("keeps the original English text verbatim", () => {
     expect(t("en", "weighted")).toBe("Enable Weighted Tag Similarity? (Prioritizes niche/rare tags)");
     expect(t("en", "topTen")).toBe("Top 10 Recommendations");
+  });
+
+  it("keeps Sergio's five loading lines and the grid title verbatim, in his order", () => {
+    expect(["line1", "line2", "line3", "line4", "line5"].map((k) => t("en", k as "line1"))).toEqual([
+      "Turning on the engine",
+      "Consulting the algorithm",
+      "Finding hidden gems",
+      "Curating recommendations",
+      "Almost there",
+    ]);
+    expect(t("en", "gridTitle")).toBe("FullCircle");
   });
 });

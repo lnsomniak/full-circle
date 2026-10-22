@@ -106,8 +106,46 @@ describe("a spread Nexus theme", () => {
     window.dispatchEvent(new MessageEvent("message", { origin: location.origin, source: window, data: spread }));
     window.dispatchEvent(new MessageEvent("message", { origin: location.origin, source: window, data: good }));
     stop();
-    expect(onTheme).toHaveBeenNthCalledWith(1, "dark", palette);
-    expect(onTheme).toHaveBeenNthCalledWith(2, "dark", null);
+    expect(onTheme).toHaveBeenNthCalledWith(1, "dark", palette, null);
+    expect(onTheme).toHaveBeenNthCalledWith(2, "dark", null, null);
+    vi.restoreAllMocks();
+  });
+});
+
+describe("typefaces in a spread theme", () => {
+  const withFaces = (typefaces: unknown) => ({ ...spread, typefaces });
+
+  it("carries a pair that is on the lists", () => {
+    const typefaces = { serif: "Gelasio", label: "Source Code Pro" };
+    expect(readParentMessage(message({ data: withFaces(typefaces) }), parent)).toEqual({ type: "theme", mode: "dark", palette, typefaces });
+  });
+
+  it("falls back to the house pair for names it does not accept", () => {
+    expect(readParentMessage(message({ data: withFaces({ serif: "Papyrus", label: "Comic Sans MS" }) }), parent)).toEqual({
+      type: "theme",
+      mode: "dark",
+      palette,
+      typefaces: { serif: "Libre Baskerville", label: "IBM Plex Mono" },
+    });
+  });
+
+  it("carries none when the message names none", () => {
+    expect(readParentMessage(message({ data: spread }), parent)).toEqual({ type: "theme", mode: "dark", palette });
+    expect(readParentMessage(message({ data: withFaces("Gelasio") }), parent)).toEqual({ type: "theme", mode: "dark", palette });
+  });
+
+  it("carries none when the palette is malformed, because plain mode has none", () => {
+    const data = { ...withFaces({ serif: "Gelasio", label: "DM Mono" }), palette: { ...palette, accent: "red" } };
+    expect(readParentMessage(message({ data }), parent)).toEqual({ type: "theme", mode: "dark" });
+  });
+
+  it("reaches onTheme as the third argument", () => {
+    vi.spyOn(window, "postMessage").mockImplementation(() => {});
+    const onTheme = vi.fn();
+    const stop = startBridge({ onTheme, onReset: vi.fn() });
+    window.dispatchEvent(new MessageEvent("message", { origin: location.origin, source: window, data: withFaces({ serif: "Cardo", label: "DM Mono" }) }));
+    stop();
+    expect(onTheme).toHaveBeenCalledWith("dark", palette, { serif: "Cardo", label: "DM Mono" });
     vi.restoreAllMocks();
   });
 });

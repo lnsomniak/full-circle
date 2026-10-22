@@ -1,5 +1,5 @@
 ﻿import { describe, expect, it } from "vitest";
-import { contrast, deriveVars, mix, PALETTE_VARS, readPalette, type Palette } from "./palette";
+import { contrast, deriveVars, GREEN, mix, PALETTE_VARS, readPalette, type Palette } from "./palette";
 
 // Six Nexus themes as the portfolio sends them: tokens flattened to #rrggbb over their ground.
 // Two light, four dark; Granite's accent and Slate's muted are the weak ones.
@@ -63,7 +63,10 @@ describe("deriveVars", () => {
         expect(vars["--panel"]).toBe(palette.surface);
         expect(vars["--line"]).toBe(palette.line);
         expect(vars["--ink"]).toBe(palette.ink);
-        expect(vars["--accent"]).toBe(palette.accent);
+      });
+
+      it("keeps FullCircle's green as the accent, whatever accent the palette sends", () => {
+        expect(vars["--accent"]).toBe(GREEN);
       });
 
       it("reads body text at 4.5:1 on ground, panel and field", () => {
@@ -84,19 +87,24 @@ describe("deriveVars", () => {
 
       it("reads tag text on the tag and the chip label on the accent at 4.5:1", () => {
         expect(on("--tag-ink", vars["--tag"])).toBeGreaterThanOrEqual(4.5);
-        expect(on("--accent-ink", palette.accent)).toBeGreaterThanOrEqual(4.5);
+        expect(on("--accent-ink", vars["--accent"])).toBeGreaterThanOrEqual(4.5);
       });
     });
   }
 
-  it("keeps a palette's accent as sent when it already reads", () => {
-    const vars = deriveVars(SAMPLES.nord);
-    expect(vars["--accent-text"]).toBe(SAMPLES.nord.accent);
+  it("uses green itself as accent text where it already reads", () => {
+    for (const name of ["slate", "granite", "brass"]) {
+      const palette = SAMPLES[name];
+      for (const bg of [palette.background, palette.surface]) expect(contrast(GREEN, bg), name).toBeGreaterThanOrEqual(4.5);
+      expect(deriveVars(palette)["--accent-text"], name).toBe(GREEN);
+    }
   });
 
-  it("lifts an accent that does not read (Granite's) instead of using it as text", () => {
-    const vars = deriveVars(SAMPLES.granite);
-    expect(contrast(SAMPLES.granite.accent, SAMPLES.granite.surface)).toBeLessThan(4.5);
-    expect(vars["--accent-text"]).not.toBe(SAMPLES.granite.accent);
+  it("lifts green toward the ink where it does not read (the light themes, and Nord's lighter panel)", () => {
+    for (const name of ["paper", "bleachSun", "nord"]) {
+      const palette = SAMPLES[name];
+      expect(contrast(GREEN, palette.surface), name).toBeLessThan(4.5);
+      expect(deriveVars(palette)["--accent-text"], name).not.toBe(GREEN);
+    }
   });
 });

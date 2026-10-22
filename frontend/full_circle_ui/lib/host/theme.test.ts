@@ -55,7 +55,7 @@ describe("applyTheme", () => {
     applyTheme("dark", palette);
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
     expect(document.documentElement.style.getPropertyValue("--ground")).toBe("#1e2530");
-    expect(document.documentElement.style.getPropertyValue("--accent")).toBe("#c4543a");
+    expect(document.documentElement.style.getPropertyValue("--accent")).toBe("#1db954");
   });
 
   it("clears the palette's tokens when the theme is cleared", () => {

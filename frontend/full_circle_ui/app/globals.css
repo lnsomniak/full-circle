@@ -2,36 +2,38 @@
 
 /* The demo's own palette. A spread Nexus theme overrides these inline on <html> (lib/host/palette.ts). */
 :root {
-  --ground: #030712;
-  --panel: #111827;
-  --line: #1f2937;
-  --field: #1f2937;
+  --ground: #121212;
+  --panel: #181818;
+  --line: #282828;
+  --field: #282828;
   --ink: #f3f4f6;
-  --ink-dim: #9ca3af;
-  --accent: #16a34a;
-  --accent-text: #4ade80;
+  --ink-dim: #b3b3b3;
+  --accent: #1db954;
+  --accent-text: #1db954;
   --accent-soft: #86efac;
-  --accent-ink: #ffffff;
+  --accent-ink: #0a0a0a;
   --tag: rgb(88 28 135 / 0.5);
   --tag-ink: #d8b4fe;
   --grad-from: #4ade80;
   --grad-to: #3b82f6;
+  --fc-font-voice: "Libre Baskerville", Georgia, serif;
+  --fc-font-label: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 [data-theme="light"] {
-  --ground: #f9fafb;
+  --ground: #f5f5f2;
   --panel: #ffffff;
-  --line: #e5e7eb;
-  --field: #f3f4f6;
-  --ink: #111827;
-  --ink-dim: #4b5563;
-  --accent: #15803d;
-  --accent-text: #15803d;
+  --line: #dcdcd6;
+  --field: #ecece7;
+  --ink: #121212;
+  --ink-dim: #4a4a4a;
+  --accent: #1db954;
+  --accent-text: #0f7a38;
   --accent-soft: #166534;
-  --accent-ink: #ffffff;
+  --accent-ink: #0a0a0a;
   --tag: #f3e8ff;
   --tag-ink: #6b21a8;
-  --grad-from: #16a34a;
+  --grad-from: #15803d;
   --grad-to: #2563eb;
   color-scheme: light;
 }
@@ -53,14 +55,14 @@
   --color-accent-ink: var(--accent-ink);
   --color-tag: var(--tag);
   --color-tag-ink: var(--tag-ink);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-voice: var(--fc-font-voice);
+  --font-label: var(--fc-font-label);
 }
 
 body {
   background: var(--ground);
   color: var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--fc-font-label);
 }
 
 .title-gradient {
@@ -90,4 +92,116 @@ html[data-still] *::after {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* The grid: diamonds in offset rows. A tile turns over to show an artist's card. */
+.tile {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: rotate(45deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tile[data-flipped] {
+  transform: rotate(45deg) rotateY(180deg);
+}
+
+html[data-still] .tile {
+  transform: rotate(45deg) rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transform: rotate(45deg) rotateY(180deg);
+  }
+}
+
+.tile-front,
+.tile-back {
+  position: absolute;
+  inset: 0;
+  display: block;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 2px;
+}
+
+.tile-front {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.tile-seed {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 9999px;
+  background: var(--accent-text);
+}
+
+.tile-back {
+  transform: rotateY(180deg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.tile-seed-back {
+  left: 9px;
+  top: 9px;
+  margin: 0;
+}
+
+.tile-card {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.tile-card svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 4px;
+}
+
+.grid-scrim {
+  background: radial-gradient(ellipse 34rem 15rem at center, var(--ground) 0%, color-mix(in srgb, var(--ground) 88%, transparent) 55%, transparent 100%);
+}
+
+.grid-title {
+  text-shadow: 0 0 40px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.grid-caption {
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+}
+
+@keyframes pulse-once {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-text) 45%, transparent);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 12px 4px color-mix(in srgb, var(--accent-text) 45%, transparent);
+  }
+}
+
+.status-dot {
+  animation: pulse-once 2s ease-in-out 1;
 }
