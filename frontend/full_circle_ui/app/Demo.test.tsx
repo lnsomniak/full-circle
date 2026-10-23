@@ -111,6 +111,14 @@ describe("the results screen", () => {
     }
   });
 
+  it("gives every seed chip the themed focus ring, and the selected one the accent fill", () => {
+    act(() => button("Laufey").click());
+    const chips = [...host.querySelectorAll("button[aria-pressed]")];
+    expect(chips).toHaveLength(8);
+    for (const chip of chips) expect(chip.className).toContain("focus-visible:outline-accent-text");
+    expect(chips.filter((c) => c.className.includes("bg-accent-fill")).map((c) => c.textContent)).toEqual(["Laufey"]);
+  });
+
   it("says why there are no real covers", () => {
     act(() => button("Laufey").click());
     expect(host.textContent).toContain("Covers here are original colour cards.");

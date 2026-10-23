@@ -54,8 +54,8 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
                   type="button"
                   aria-pressed={i === seedIndex}
                   onClick={() => onSeed(i)}
-                  className={`rounded-full px-3 py-1.5 text-sm transition ${
-                    i === seedIndex ? "bg-accent text-accent-ink" : "bg-field text-ink hover:bg-line"
+                  className={`rounded-full px-3 py-1.5 text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text ${
+                    i === seedIndex ? "bg-accent-fill text-accent-ink" : "bg-field text-ink hover:bg-line"
                   }`}
                 >
                   {s.seed}

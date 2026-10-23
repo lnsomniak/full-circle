@@ -85,9 +85,13 @@ describe("deriveVars", () => {
         }
       });
 
-      it("reads tag text on the tag and the chip label on the accent at 4.5:1", () => {
+      it("reads tag text on the tag and the chip label on the accent fill at 4.5:1", () => {
         expect(on("--tag-ink", vars["--tag"])).toBeGreaterThanOrEqual(4.5);
-        expect(on("--accent-ink", vars["--accent"])).toBeGreaterThanOrEqual(4.5);
+        expect(on("--accent-ink", vars["--accent-fill"])).toBeGreaterThanOrEqual(4.5);
+      });
+
+      it("reads the accent fill at 3:1 on the panel and on an unselected chip", () => {
+        for (const bg of [palette.surface, vars["--field"]]) expect(on("--accent-fill", bg)).toBeGreaterThanOrEqual(3);
       });
     });
   }
@@ -97,6 +101,16 @@ describe("deriveVars", () => {
       const palette = SAMPLES[name];
       for (const bg of [palette.background, palette.surface]) expect(contrast(GREEN, bg), name).toBeGreaterThanOrEqual(4.5);
       expect(deriveVars(palette)["--accent-text"], name).toBe(GREEN);
+    }
+  });
+
+  it("fills with green itself where it already reads at 3:1, and darkens it on the light themes", () => {
+    for (const name of ["slate", "granite", "nord", "brass"]) expect(deriveVars(SAMPLES[name])["--accent-fill"], name).toBe(GREEN);
+    for (const name of ["paper", "bleachSun"]) {
+      const vars = deriveVars(SAMPLES[name]);
+      expect(contrast(GREEN, SAMPLES[name].surface), name).toBeLessThan(3);
+      expect(vars["--accent-fill"], name).not.toBe(GREEN);
+      expect(vars["--accent"], name).toBe(GREEN);
     }
   });
 

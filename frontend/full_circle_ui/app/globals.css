@@ -9,6 +9,7 @@
   --ink: #f3f4f6;
   --ink-dim: #b3b3b3;
   --accent: #1db954;
+  --accent-fill: #1db954;
   --accent-text: #1db954;
   --accent-soft: #86efac;
   --accent-ink: #0a0a0a;
@@ -28,6 +29,7 @@
   --ink: #121212;
   --ink-dim: #4a4a4a;
   --accent: #1db954;
+  --accent-fill: #1b9847;
   --accent-text: #0f7a38;
   --accent-soft: #166534;
   --accent-ink: #0a0a0a;
@@ -50,6 +52,7 @@
   --color-ink: var(--ink);
   --color-ink-dim: var(--ink-dim);
   --color-accent: var(--accent);
+  --color-accent-fill: var(--accent-fill);
   --color-accent-text: var(--accent-text);
   --color-accent-soft: var(--accent-soft);
   --color-accent-ink: var(--accent-ink);
@@ -70,7 +73,7 @@ body {
 }
 
 input[type="checkbox"] {
-  accent-color: var(--accent);
+  accent-color: var(--accent-fill);
 }
 
 /* No flash: the page stays hidden until a theme has been applied to <html>. */
@@ -187,7 +190,7 @@ html[data-still] .tile {
 }
 
 .grid-caption {
-  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  background: var(--ground);
 }
 
 @keyframes pulse-once {

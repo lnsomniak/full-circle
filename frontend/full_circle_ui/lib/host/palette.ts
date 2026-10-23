@@ -11,6 +11,7 @@ export interface Palette {
 const KEYS = ["background", "surface", "line", "ink", "muted", "accent"] as const;
 const HEX = /^#[0-9a-f]{6}$/i;
 const MIN_TEXT_CONTRAST = 4.5;
+const MIN_FILL_CONTRAST = 3;
 
 /** The palette whole, or null when any of the six is missing or not `#rrggbb`. */
 export function readPalette(value: unknown): Palette | null {
@@ -80,6 +81,7 @@ export const PALETTE_VARS = [
   "--ink",
   "--ink-dim",
   "--accent",
+  "--accent-fill",
   "--accent-text",
   "--accent-soft",
   "--accent-ink",
@@ -98,24 +100,29 @@ const PURPLE = "#9333ea";
  * colours as sent; the accent stays FullCircle's green and the tags its purple, so the palette's
  * own accent is not used. Every colour used as text is moved toward the ink until it reads
  * (4.5:1) on the ground and the panel, because a spread theme's muted need not, and green does
- * not on a light ground. Nothing here depends on light or dark: the palette already is one or the other.
+ * not on a light ground. The green that fills the selected chip and the checkbox is moved the same
+ * way until it reads at 3:1 on the panel and on an unselected chip, which only the light themes need.
+ * Nothing here depends on light or dark: the palette already is one or the other.
  */
 export function deriveVars(p: Palette): Record<(typeof PALETTE_VARS)[number], string> {
   const onGroundAndPanel = [p.background, p.surface];
   const accentText = readable(GREEN, onGroundAndPanel, p.ink);
   const accentSoft = readable(mix(accentText, p.ink, 75), onGroundAndPanel, p.ink);
+  const field = mix(p.line, p.surface, 60);
+  const accentFill = readable(GREEN, [p.surface, field], p.ink, MIN_FILL_CONTRAST);
   const tag = mix(PURPLE, p.surface, 16);
   return {
     "--ground": p.background,
     "--panel": p.surface,
     "--line": p.line,
-    "--field": mix(p.line, p.surface, 60),
+    "--field": field,
     "--ink": p.ink,
     "--ink-dim": readable(p.muted, onGroundAndPanel, p.ink),
     "--accent": GREEN,
+    "--accent-fill": accentFill,
     "--accent-text": accentText,
     "--accent-soft": accentSoft,
-    "--accent-ink": inkOn(GREEN, p.background, p.ink),
+    "--accent-ink": inkOn(accentFill, p.background, p.ink),
     "--tag": tag,
     "--tag-ink": readable(PURPLE, [tag], p.ink),
     "--grad-from": accentText,
