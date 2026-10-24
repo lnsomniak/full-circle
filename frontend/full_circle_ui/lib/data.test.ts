@@ -60,4 +60,10 @@ describe("copy", () => {
     ]);
     expect(t("en", "gridTitle")).toBe("FullCircle");
   });
+
+  it("keeps Sergio's own Spanish for the museum text", () => {
+    expect(t("es", "precomputed")).toBe(
+      "Lo que ves aquí son mis resultados de mi primer intento entrenando un modelo de IA, algo de lo que ya había oído y leído, pero nunca hecho en realidad. Lo pensé como un gran proyecto de feria de ciencias, sin esperar perfección, ya que no había un puntaje que superar; solo el promedio que pudiera lograr con el hardware que tenía.",
+    );
+  });
 });

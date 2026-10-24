@@ -53,7 +53,7 @@ export const COPY = {
   accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "es" },
   precomputed: {
     en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about but was new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no score to beat – simply an average that I could get based on the hardware I had.",
-    es: "Lo que ves aquí es una serie de resultados, un museo si se quiere, de mi primer intento de entrenar bien un modelo de IA, algo de lo que ya había oído hablar, pero que nunca había hecho realmente sin supervisión. Lo pensé como un gran proyecto de feria de ciencias, sin esperar perfección, ya que no había un puntaje que superar; solo el promedio que pudiera lograr con el hardware que tenía.",
+    es: "Lo que ves aquí son mis resultados de mi primer intento entrenando un modelo de IA, algo de lo que ya había oído y leído, pero nunca hecho en realidad. Lo pensé como un gran proyecto de feria de ciencias, sin esperar perfección, ya que no había un puntaje que superar; solo el promedio que pudiera lograr con el hardware que tenía.",
     ph: "es",
   },
   aboutModel: { en: "About this model", es: "Sobre este modelo", ph: "both" },
