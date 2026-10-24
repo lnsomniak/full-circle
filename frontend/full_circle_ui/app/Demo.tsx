@@ -14,6 +14,7 @@ import { sendAmbient, sendTint } from "@/lib/host/siteEffects";
 import { applyTypefaces } from "@/lib/host/typefaces";
 import { tintFor } from "@/lib/tint";
 import { titleStops } from "@/lib/titleGradient";
+import AboutModel from "./AboutModel";
 import { Card, Strip } from "./Cover";
 import Grid from "./Grid";
 import Links from "./Links";
@@ -144,12 +145,12 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
           </ol>
         </section>
       </div>
-      <div className="mt-3 flex w-full max-w-[1100px] items-end justify-between gap-6">
-        <div className="space-y-1 text-xs text-ink-dim">
+      <div className="mt-3 flex w-full max-w-[1100px] items-center justify-between gap-6">
+        <div className="flex items-center gap-4 text-xs text-ink-dim">
           <p>
-            {t(lang, "precomputed")} {t(lang, "accuracy")}: {(DATA.model.test_accuracy * 100).toFixed(1)}%.
+            {t(lang, "accuracy")}: {(DATA.model.test_accuracy * 100).toFixed(1)}%.
           </p>
-          <p>{t(lang, "coversNote")}</p>
+          <AboutModel lang={lang} />
         </div>
         <Links lang={lang} className="shrink-0" />
       </div>

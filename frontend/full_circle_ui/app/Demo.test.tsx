@@ -119,8 +119,59 @@ describe("the results screen", () => {
     expect(chips.filter((c) => c.className.includes("bg-accent-fill")).map((c) => c.textContent)).toEqual(["Laufey"]);
   });
 
-  it("says why there are no real covers", () => {
-    act(() => button("Laufey").click());
+  it("keeps the covers note for the grid, where the cards turn over", () => {
     expect(host.textContent).toContain("color cards loosely based and heavily inspired by David Marsh");
+    act(() => button("Laufey").click());
+    expect(host.textContent).not.toContain("color cards loosely based");
+  });
+
+  it("ends in one line: the test accuracy, the About control and the links", () => {
+    act(() => button("Laufey").click());
+    const footer = host.querySelector("main > div:last-child")!;
+    expect(footer.textContent).toContain("Model test accuracy: 76.2%.");
+    expect(footer.querySelector("button[aria-expanded]")?.textContent).toBe("About this model");
+    expect(footer.querySelectorAll("nav a")).toHaveLength(4);
+    expect(footer.textContent).not.toContain("museum");
+  });
+});
+
+describe("About this model", () => {
+  const about = () => host.querySelector("button[aria-expanded]") as HTMLButtonElement;
+  const open = () => {
+    act(() => button("Laufey").click());
+    act(() => about().click());
+  };
+
+  it("opens Sergio's note and the history, and closes on the same control", () => {
+    act(() => button("Laufey").click());
+    expect(about().getAttribute("aria-expanded")).toBe("false");
+    expect(host.querySelector("[role=region]")).toBeNull();
+    act(() => about().click());
+    expect(about().getAttribute("aria-expanded")).toBe("true");
+    const panel = host.querySelector("[role=region]")!;
+    expect(panel.id).toBe(about().getAttribute("aria-controls"));
+    expect(panel.textContent).toContain("a museum of my first attempt at properly training an Ai model");
+    act(() => about().click());
+    expect(host.querySelector("[role=region]")).toBeNull();
+  });
+
+  it("swaps the history between the two eras, labelling the old feature set", () => {
+    open();
+    const panel = () => host.querySelector("[role=region]")!.textContent!;
+    expect(panel()).toContain("Current feature set");
+    expect(panel()).toContain("76.19%");
+    act(() => button("Random Forest").click());
+    expect(button("Random Forest").getAttribute("aria-pressed")).toBe("true");
+    expect(button("XGBoost").getAttribute("aria-pressed")).toBe("false");
+    expect(panel()).toContain("Old feature set");
+    expect(panel()).toContain("62.59%");
+    expect(panel()).not.toContain("Current feature set");
+  });
+
+  it("closes on Escape and gives the focus back to the control", () => {
+    open();
+    act(() => void window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })));
+    expect(host.querySelector("[role=region]")).toBeNull();
+    expect(document.activeElement).toBe(about());
   });
 });
