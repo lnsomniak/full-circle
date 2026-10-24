@@ -29,7 +29,7 @@ export const COPY = {
   line3: { en: "Finding hidden gems", es: "Buscando joyas ocultas", ph: "es" },
   line4: { en: "Curating recommendations", es: "Curando recomendaciones", ph: "es" },
   line5: { en: "Almost there", es: "Casi listo", ph: "es" },
-  ripple: { en: "Ripple", es: "Onda", ph: "both" },
+  ripple: { en: "Ripple", es: "Onda", ph: "es" },
   tilesLabel: {
     en: "Artist tiles. Move between them with the arrow keys.",
     es: "Fichas de artistas. Muévete entre ellas con las flechas del teclado.",
@@ -38,23 +38,23 @@ export const COPY = {
   seedHint: {
     en: "Seed artist. Press Enter or tap to see its recommendations.",
     es: "Artista semilla. Pulsa Enter o toca para ver sus recomendaciones.",
-    ph: "both",
+    ph: "es",
   },
-  recHint: { en: "Recommended artist.", es: "Artista recomendado.", ph: "both" },
-  back: { en: "Back to grid", es: "Volver a la cuadrícula", ph: "both" },
+  recHint: { en: "Recommended artist.", es: "Artista recomendado.", ph: "es" },
+  back: { en: "Back to grid", es: "Volver a la cuadrícula", ph: "es" },
   links: { en: "Links", es: "Enlaces", ph: "both" },
   newTab: { en: "(opens in a new tab)", es: "(se abre en una pestaña nueva)", ph: "both" },
   coversNote: {
-    en: "Covers here are original colour cards. Real album art belongs to its artists and labels, so the demo shows each artist's palette instead.",
+    en: "The covers you see as you move the mouse through the screen are color cards loosely based and heavily inspired by David Marsh and his pantone swatch album covers. The real album art belongs to the artists and labels, this seemed like a fun alternative.",
     es: "Aquí las portadas son tarjetas de color originales. El arte real de los álbumes pertenece a sus artistas y sellos, así que la demo muestra la paleta de cada artista.",
-    ph: "both",
+    ph: "es",
   },
-  seeds: { en: "Seed artists", es: "Artistas semilla", ph: "both" },
-  accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "both" },
+  seeds: { en: "Seed artists", es: "Artistas semilla", ph: "es" },
+  accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "es" },
   precomputed: {
-    en: "Precomputed by the real FullCircle model for fixed seed artists. Nothing here runs live.",
+    en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about, but new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no threshold - simply an average that I could get based on the hardware I had.",
     es: "Calculado de antemano con el modelo real de FullCircle para artistas semilla fijos. Nada aquí se ejecuta en vivo.",
-    ph: "both",
+    ph: "es",
   },
 } satisfies Record<string, Entry>;
 

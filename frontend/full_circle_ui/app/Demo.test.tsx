@@ -121,6 +121,6 @@ describe("the results screen", () => {
 
   it("says why there are no real covers", () => {
     act(() => button("Laufey").click());
-    expect(host.textContent).toContain("Covers here are original colour cards.");
+    expect(host.textContent).toContain("color cards loosely based and heavily inspired by David Marsh");
   });
 });

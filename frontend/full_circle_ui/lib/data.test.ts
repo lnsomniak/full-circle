@@ -42,7 +42,7 @@ describe("copy", () => {
         .filter((k) => k !== "title" && k !== "gridTitle")
         .sort(),
     );
-    expect(placeholders("en").sort()).toEqual(["accuracy", "back", "coversNote", "links", "newTab", "precomputed", "recHint", "ripple", "seedHint", "seeds", "tilesLabel"]);
+    expect(placeholders("en").sort()).toEqual(["links", "newTab", "tilesLabel"]);
   });
 
   it("keeps the original English text verbatim", () => {
