@@ -55,6 +55,7 @@ export default function AboutModel({ lang }: { lang: Lang }) {
           <p>{t(lang, "precomputed")}</p>
           <div className="space-y-2 border-t border-line pt-3">
             <p className="text-ink">{t(lang, "historyHeading")}</p>
+            <p>{t(lang, "historyStory")}</p>
             <div className="flex gap-2">
               {ERAS.map((e) => (
                 <button

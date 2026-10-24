@@ -120,7 +120,7 @@ describe("the results screen", () => {
   });
 
   it("keeps the covers note for the grid, where the cards turn over", () => {
-    expect(host.textContent).toContain("color cards loosely based and heavily inspired by David Marsh");
+    expect(host.textContent).toContain("The covers you see as the tiles turn over are color cards loosely based and heavily inspired by David Marsh");
     act(() => button("Laufey").click());
     expect(host.textContent).not.toContain("color cards loosely based");
   });
@@ -151,6 +151,9 @@ describe("About this model", () => {
     const panel = host.querySelector("[role=region]")!;
     expect(panel.id).toBe(about().getAttribute("aria-controls"));
     expect(panel.textContent).toContain("a museum of my first attempt at properly training an Ai model");
+    expect(panel.textContent).toContain("since there was no score to beat");
+    expect(panel.textContent).toContain("I opted for the process of elimination");
+    expect(panel.textContent).toContain("a different XGBoost shaped wall");
     act(() => about().click());
     expect(host.querySelector("[role=region]")).toBeNull();
   });

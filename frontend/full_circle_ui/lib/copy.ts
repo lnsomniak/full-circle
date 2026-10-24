@@ -45,19 +45,24 @@ export const COPY = {
   links: { en: "Links", es: "Enlaces", ph: "both" },
   newTab: { en: "(opens in a new tab)", es: "(se abre en una pestaña nueva)", ph: "both" },
   coversNote: {
-    en: "The covers you see as you move the mouse through the screen are color cards loosely based and heavily inspired by David Marsh and his pantone swatch album covers. The real album art belongs to the artists and labels, this seemed like a fun alternative.",
+    en: "The covers you see as the tiles turn over are color cards loosely based and heavily inspired by David Marsh and his pantone swatch album covers. The real album art belongs to the artists and labels, this seemed like a fun alternative.",
     es: "Aquí las portadas son tarjetas de color originales. El arte real de los álbumes pertenece a sus artistas y sellos, así que la demo muestra la paleta de cada artista.",
     ph: "es",
   },
   seeds: { en: "Seed artists", es: "Artistas semilla", ph: "es" },
   accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "es" },
   precomputed: {
-    en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about, but new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no threshold - simply an average that I could get based on the hardware I had.",
+    en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about, but new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no score to beat - simply an average that I could get based on the hardware I had.",
     es: "Calculado de antemano con el modelo real de FullCircle para artistas semilla fijos. Nada aquí se ejecuta en vivo.",
     ph: "es",
   },
   aboutModel: { en: "About this model", es: "Sobre este modelo", ph: "both" },
   historyHeading: { en: "Model history", es: "Historia del modelo", ph: "both" },
+  historyStory: {
+    en: "With no other first hand experience, I opted for the process of elimination. I was able to get it down to two models and ran Random Forest first. Random Forest sat at 60%, then 61.9%, then 62.6%, which frustrated me. A wall can only be run into so many times, so I tried a different XGBoost shaped wall. The results you see displayed are such.",
+    es: "Sin otra experiencia propia, opté por el proceso de eliminación. Logré reducirlo a dos modelos y probé primero Random Forest. Random Forest se quedó en 60%, luego 61.9%, luego 62.6%, lo que me frustró. Uno solo puede chocar contra una pared cierto número de veces, así que probé una pared distinta con forma de XGBoost. Los resultados que ves son estos.",
+    ph: "es",
+  },
   eraRf: { en: "Random Forest", es: "Random Forest", ph: "both" },
   eraXgb: { en: "XGBoost", es: "XGBoost", ph: "both" },
   historyRf: {
