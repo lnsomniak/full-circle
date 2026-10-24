@@ -36,12 +36,8 @@ describe("copy", () => {
     }
   });
 
-  it("flags every Spanish string and the new English labels as placeholders", () => {
-    expect(placeholders("es").sort()).toEqual(
-      Object.keys(COPY)
-        .filter((k) => k !== "title" && k !== "gridTitle")
-        .sort(),
-    );
+  it("flags only what Sergio has not approved: the screen-reader labels in both languages, and the English of the model-history labels", () => {
+    expect(placeholders("es").sort()).toEqual(["links", "newTab", "tilesLabel"]);
     expect(placeholders("en").sort()).toEqual(["aboutModel", "eraRf", "eraXgb", "historyHeading", "historyRf", "historyXgb", "links", "newTab", "tilesLabel"]);
   });
 
@@ -59,6 +55,10 @@ describe("copy", () => {
       "Almost there",
     ]);
     expect(t("en", "gridTitle")).toBe("FullCircle");
+  });
+
+  it("calls the wave button Ola in Spanish", () => {
+    expect(t("es", "ripple")).toBe("Ola");
   });
 
   it("keeps Sergio's own Spanish for the museum text", () => {

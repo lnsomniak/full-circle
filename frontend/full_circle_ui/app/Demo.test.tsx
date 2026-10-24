@@ -150,7 +150,7 @@ describe("About this model", () => {
     expect(about().getAttribute("aria-expanded")).toBe("true");
     const panel = host.querySelector("[role=region]")!;
     expect(panel.id).toBe(about().getAttribute("aria-controls"));
-    expect(panel.textContent).toContain("a museum of my first attempt at properly training an Ai model");
+    expect(panel.textContent).toContain("is a series of results, a museum, if you will, of my first attempt at properly training an Ai model");
     expect(panel.textContent).toContain("something I wasn't new to hearing about but was new to actually doing unsupervised.");
     expect(panel.textContent).toContain("since there was no score to beat – simply an average");
     expect(panel.textContent).toContain("I opted for the process of elimination");
