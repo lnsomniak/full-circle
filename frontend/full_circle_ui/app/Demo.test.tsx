@@ -151,7 +151,8 @@ describe("About this model", () => {
     const panel = host.querySelector("[role=region]")!;
     expect(panel.id).toBe(about().getAttribute("aria-controls"));
     expect(panel.textContent).toContain("a museum of my first attempt at properly training an Ai model");
-    expect(panel.textContent).toContain("since there was no score to beat");
+    expect(panel.textContent).toContain("something I wasn't new to hearing about but was new to actually doing unsupervised.");
+    expect(panel.textContent).toContain("since there was no score to beat – simply an average");
     expect(panel.textContent).toContain("I opted for the process of elimination");
     expect(panel.textContent).toContain("a different XGBoost shaped wall");
     act(() => about().click());
@@ -161,14 +162,13 @@ describe("About this model", () => {
   it("swaps the history between the two eras, labelling the old feature set", () => {
     open();
     const panel = () => host.querySelector("[role=region]")!.textContent!;
-    expect(panel()).toContain("Current feature set");
-    expect(panel()).toContain("76.19%");
+    expect(panel()).toContain("Current feature set: TF-IDF tags plus listening behavior, 307 features.");
+    expect(panel()).not.toContain("167 features");
     act(() => button("Random Forest").click());
     expect(button("Random Forest").getAttribute("aria-pressed")).toBe("true");
     expect(button("XGBoost").getAttribute("aria-pressed")).toBe("false");
-    expect(panel()).toContain("Old feature set");
-    expect(panel()).toContain("62.59%");
-    expect(panel()).not.toContain("Current feature set");
+    expect(panel()).toContain("Old feature set: raw Last.fm tag counts, 167 features.");
+    expect(panel()).not.toContain("307 features");
   });
 
   it("closes on Escape and gives the focus back to the control", () => {

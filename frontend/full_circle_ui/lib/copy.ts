@@ -52,7 +52,7 @@ export const COPY = {
   seeds: { en: "Seed artists", es: "Artistas semilla", ph: "es" },
   accuracy: { en: "Model test accuracy", es: "Precisión del modelo en la prueba", ph: "es" },
   precomputed: {
-    en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about, but new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no score to beat - simply an average that I could get based on the hardware I had.",
+    en: "What you're seeing here is essentially a museum of my first attempt at properly training an Ai model, something I wasn't new to hearing about but was new to actually doing unsupervised. I thought of it as a large science fair project, not expecting perfection since there was no score to beat – simply an average that I could get based on the hardware I had.",
     es: "Calculado de antemano con el modelo real de FullCircle para artistas semilla fijos. Nada aquí se ejecuta en vivo.",
     ph: "es",
   },
@@ -66,13 +66,13 @@ export const COPY = {
   eraRf: { en: "Random Forest", es: "Random Forest", ph: "both" },
   eraXgb: { en: "XGBoost", es: "XGBoost", ph: "both" },
   historyRf: {
-    en: "Old feature set: raw Last.fm tag counts, 167 features. A Random Forest scored 60.00% on 500 liked and 500 not-liked artists, 61.90% with all 734 liked artists, and 62.59% after tuning. It had stopped improving.",
-    es: "Conjunto de características anterior: conteos de etiquetas de Last.fm, 167 características. Un Random Forest obtuvo 60.00% con 500 artistas que me gustan y 500 que no, 61.90% con los 734 que me gustan y 62.59% tras ajustarlo. Había dejado de mejorar.",
+    en: "Old feature set: raw Last.fm tag counts, 167 features.",
+    es: "Conjunto de características anterior: conteos de etiquetas de Last.fm, 167 características.",
     ph: "both",
   },
   historyXgb: {
-    en: "Current feature set: TF-IDF tags plus listening behaviour, 307 features. The new features lifted accuracy to 76.53%; a 95.92% result was data leakage and was removed. XGBoost with grid search finished at 76.19% test accuracy.",
-    es: "Conjunto de características actual: etiquetas TF-IDF más comportamiento de escucha, 307 características. Las nuevas características subieron la precisión a 76.53%; un resultado de 95.92% era fuga de datos y se eliminó. XGBoost con búsqueda en cuadrícula terminó con 76.19% de precisión en la prueba.",
+    en: "Current feature set: TF-IDF tags plus listening behavior, 307 features.",
+    es: "Conjunto de características actual: etiquetas TF-IDF más comportamiento de escucha, 307 características.",
     ph: "both",
   },
 } satisfies Record<string, Entry>;
