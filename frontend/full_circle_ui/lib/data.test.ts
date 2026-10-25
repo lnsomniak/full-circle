@@ -36,9 +36,18 @@ describe("copy", () => {
     }
   });
 
-  it("flags only what Sergio has not approved: the screen-reader labels in both languages, and the English of the model-history labels", () => {
-    expect(placeholders("es").sort()).toEqual(["links", "newTab", "tilesLabel"]);
-    expect(placeholders("en").sort()).toEqual(["aboutModel", "eraRf", "eraXgb", "historyHeading", "historyRf", "historyXgb", "links", "newTab", "tilesLabel"]);
+  it("has no string left unreviewed in either language", () => {
+    expect(placeholders("es")).toEqual([]);
+    expect(placeholders("en")).toEqual([]);
+  });
+
+  it("states the model-history accuracies the dev log and model metadata give", () => {
+    const xgb = `${(DATA.model.test_accuracy * 100).toFixed(1)}%`;
+    expect(xgb).toBe("76.2%");
+    expect(t("en", "historyXgb")).toContain(`Accuracy: ${xgb}.`);
+    expect(t("es", "historyXgb")).toContain(`Precisión: ${xgb}.`);
+    expect(t("en", "historyRf")).toContain("Accuracy: 62.6%.");
+    expect(t("es", "historyRf")).toContain("Precisión: 62.6%.");
   });
 
   it("keeps the original English text verbatim", () => {
