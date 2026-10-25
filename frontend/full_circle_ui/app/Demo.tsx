@@ -46,9 +46,9 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
             </button>
           </div>
 
-          <div className="rounded-xl border border-line bg-panel p-4 shadow-2xl">
-            <p className="mb-3 text-ink-dim">{t(lang, "seeds")}</p>
-            <div className="mb-4 flex flex-wrap gap-2">
+          <div className="rounded-xl border border-line bg-panel px-4 py-3 shadow-2xl">
+            <p className="mb-2 text-ink-dim">{t(lang, "seeds")}</p>
+            <div className="mb-3 flex flex-wrap gap-2">
               {DATA.seeds.map((s, i) => (
                 <button
                   key={s.seed}
@@ -64,7 +64,7 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
               ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex gap-3">
                 <Card artist={seed.seed} className="block w-20 shrink-0" />
                 <div className="min-w-0 flex-1">

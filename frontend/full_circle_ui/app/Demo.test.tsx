@@ -119,6 +119,15 @@ describe("the results screen", () => {
     expect(chips.filter((c) => c.className.includes("bg-accent-fill")).map((c) => c.textContent)).toEqual(["Laufey"]);
   });
 
+  it("keeps the seed panel's vertical rhythm tight, so the longer Spanish weighted label still fits 700px", () => {
+    act(() => button("Laufey").click());
+    const panel = host.querySelector("main section > div.rounded-xl")!;
+    expect(panel.className).toContain("py-3");
+    expect(panel.className).not.toMatch(/(^|\s)p-4(\s|$)/);
+    expect(panel.querySelector("div.space-y-3")).not.toBeNull();
+    expect(panel.querySelector("div.flex-wrap")?.className).toContain("mb-3");
+  });
+
   it("keeps the covers note for the grid, where the cards turn over", () => {
     expect(host.textContent).toContain("The covers you see as the tiles turn over are color cards loosely based and heavily inspired by David Marsh");
     act(() => button("Laufey").click());
