@@ -41,6 +41,11 @@ describe("copy", () => {
     expect(placeholders("en")).toEqual([]);
   });
 
+  it("keeps Sergio's own words for the weighted note", () => {
+    expect(t("en", "weightedNote")).toBe("Rare tags count for more, so the list leans toward niche artists.");
+    expect(t("es", "weightedNote")).toBe("Las etiquetas poco comunes cuentan más, así que la lista se inclina hacia esos artistas que no reciben mucho amor globalmente.");
+  });
+
   it("states the model-history accuracies the dev log and model metadata give", () => {
     const xgb = `${(DATA.model.test_accuracy * 100).toFixed(1)}%`;
     expect(xgb).toBe("76.2%");

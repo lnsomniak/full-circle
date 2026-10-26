@@ -126,6 +126,22 @@ describe("the results screen", () => {
     expect(panel.className).not.toMatch(/(^|\s)p-4(\s|$)/);
     expect(panel.querySelector("div.space-y-3")).not.toBeNull();
     expect(panel.querySelector("div.flex-wrap")?.className).toContain("mb-3");
+    expect(panel.querySelector("textarea")?.rows).toBe(5);
+    expect(host.querySelector("main")?.className).toContain("py-3");
+    expect(host.querySelector("main")?.className).not.toMatch(/(^|\s)p-5(\s|$)/);
+    expect(host.querySelector("main > div:last-child")?.className).toContain("mt-2");
+  });
+
+  it("puts the weighted note on its own line by the checkbox, which the checkbox is described by", () => {
+    act(() => button("Laufey").click());
+    const box = host.querySelector("input[type=checkbox]")!;
+    const note = host.querySelector("#weighted-note")!;
+    expect(box.getAttribute("aria-describedby")).toBe("weighted-note");
+    expect(note.tagName).toBe("P");
+    expect(note.textContent).toBe("Rare tags count for more, so the list leans toward niche artists.");
+    expect(note.closest("label")).toBeNull();
+    expect(note.className).not.toContain("pl-");
+    expect(box.closest("label")?.textContent).toContain("Enable Weighted Tag Similarity?");
   });
 
   it("gives the seed column 300px, so the weighted label and the note beside it wrap less", () => {

@@ -18,6 +18,10 @@ export const COPY = {
     en: "Enable Weighted Tag Similarity? (Prioritizes niche/rare tags)",
     es: "¿Activar la similitud ponderada de etiquetas? (Da prioridad a las etiquetas de nicho o poco comunes)",
       },
+  weightedNote: {
+    en: "Rare tags count for more, so the list leans toward niche artists.",
+    es: "Las etiquetas poco comunes cuentan más, así que la lista se inclina hacia esos artistas que no reciben mucho amor globalmente.",
+  },
   confidence: { en: "Prediction Confidence: ", es: "Confianza de la predicción: " },
   topTen: { en: "Top 10 Recommendations", es: "Las 10 mejores recomendaciones" },
   similarity: { en: "Similarity", es: "Similitud" },

@@ -27,10 +27,10 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
   const [gradFrom, gradTo] = titleStops(paletteOf(seed.seed), ground, ink);
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-label text-sm text-ink">
+    <main className="flex min-h-screen flex-col items-center bg-ground px-5 py-3 font-label text-sm text-ink">
       <div className="grid w-full max-w-[1100px] grid-cols-[300px_minmax(0,1fr)] gap-5">
         <section>
-          <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="mb-2 flex items-center justify-between gap-2">
             <h1
               className="title-gradient whitespace-nowrap bg-clip-text font-voice text-2xl text-transparent"
               style={{ "--grad-from": gradFrom, "--grad-to": gradTo } as CSSProperties}
@@ -91,15 +91,21 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
                   className="w-full resize-none rounded border border-line bg-field p-2 text-xs text-ink focus:outline-none"
                 />
               </div>
-              <label className="flex cursor-pointer items-start space-x-2">
-                <input
-                  type="checkbox"
-                  checked={isWeighted}
-                  onChange={(e) => setIsWeighted(e.target.checked)}
-                  className="mt-0.5 h-5 w-5 shrink-0 rounded"
-                />
-                <span className="select-none text-ink-dim">{t(lang, "weighted")}</span>
-              </label>
+              <div>
+                <label className="flex cursor-pointer items-start space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={isWeighted}
+                    onChange={(e) => setIsWeighted(e.target.checked)}
+                    aria-describedby="weighted-note"
+                    className="mt-0.5 h-5 w-5 shrink-0 rounded"
+                  />
+                  <span className="select-none text-ink-dim">{t(lang, "weighted")}</span>
+                </label>
+                <p id="weighted-note" className="mt-1 text-xs text-ink-dim">
+                  {t(lang, "weightedNote")}
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -145,7 +151,7 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
           </ol>
         </section>
       </div>
-      <div className="mt-3 flex w-full max-w-[1100px] items-center justify-between gap-6">
+      <div className="mt-2 flex w-full max-w-[1100px] items-center justify-between gap-6">
         <div className="flex items-center gap-4 text-xs text-ink-dim">
           <p>
             {t(lang, "accuracy")}: {(DATA.model.test_accuracy * 100).toFixed(1)}%.
