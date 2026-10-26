@@ -128,6 +128,11 @@ describe("the results screen", () => {
     expect(panel.querySelector("div.flex-wrap")?.className).toContain("mb-3");
   });
 
+  it("gives the seed column 300px, so the weighted label and the note beside it wrap less", () => {
+    act(() => button("Laufey").click());
+    expect(host.querySelector("main > div:first-child")?.className).toContain("grid-cols-[300px_minmax(0,1fr)]");
+  });
+
   it("keeps the covers note for the grid, where the cards turn over", () => {
     expect(host.textContent).toContain("The covers you see as the tiles turn over are color cards loosely based and heavily inspired by David Marsh");
     act(() => button("Laufey").click());

@@ -28,7 +28,7 @@ function Recommender({ lang, seedIndex, onSeed, onBack }: { lang: Lang; seedInde
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-ground p-5 font-label text-sm text-ink">
-      <div className="grid w-full max-w-[1100px] grid-cols-[264px_minmax(0,1fr)] gap-5">
+      <div className="grid w-full max-w-[1100px] grid-cols-[300px_minmax(0,1fr)] gap-5">
         <section>
           <div className="mb-3 flex items-center justify-between gap-2">
             <h1
