@@ -1,112 +1,137 @@
-# Full-Circle - Intelligent Music Discovery Engine
-
+# Full-Circle - Intelligent Music Discovery Engine  
 ## What This Is
 
-A personalized music recommendation system that actually understands my taste across genres. Built out of spite towards the giants of the music world, because I'm tired of algorithmic playlists that don't get the vibe. My taste ranges music across UK rap, Latin indie, and alt rock, etc etc.. and a wider net creates room for error in algorithms! This would allow me to control not only the net, but the whole ship. 
-## The Problem
+A personalized music recommendation system that understands taste across genres. Built out of spite towards the giants of the music world, music taste ranges yet a wider net creates room for error in algorithms! This lets me control not only the net, but the whole ship.
 
-Spotify's recommendations are decent, but they're trained on everybody. I want something that learns *my* specific taste evolution, the energy I look for, the moods I gravitate toward, the way I jump between completely different genres yet understands recency bias. This is this tool. Something to match my energy and can read through my subtle patterns in my 6 years listening history Spotify provided at request... 
+## The Problem 
+
+Spotify's recommendations are decent, but they're trained on everybody. I wanted something that learns a specific taste evolution, the energy you look for, the moods you gravitate toward, all while understanding recency bias.
 
 ## Tech Stack
 
-**Data Collection & Storage:**
-- Python 3.12
-- Spotify Web API (spotipy) - listening history extraction
-- Last.FM API(pylast) - genre trend for further data collection 
-- SQLite - 140k+ plays stored with varying timestamps
-- CronTab - automated 3x daily sync (8am, 2pm, 10pm)
+**Frontend:**
+- Next.js 15 + React + TypeScript
+- Tailwind CSS
+- Spotify OAuth (PKCE flow)
+- Interactive diamond grid loading screen
   
-**Machine Learning:**
-- NumPy/Pandas - data processing and feature engineering
-- Time weighted listening patterns (exponential decay)
-- XGBoost & Random Forest
-- Tag based feature vectors from [Last.fm](http://last.fm/)
-- Composite scoring (tag similarity × endorsement strength)
+**Backend:**
+- FastAPI (Python)
+- XGBoost + TF-IDF vectorization
+- Cosine similarity matching
+- Deployed on Render
   
-**Recommendation Engine:**
-- Hybrid approach: collaborative filtering + content based
-- Tag similarity matching
-- Artist endorsement system (weighted by play counts)
-- Time decayed preferences (90 day half life)
+**Data & APIs:**
+- Spotify Web API - OAuth, artist images, user top artists
+- Last.fm API - genre/tag extraction
+- Supabase (PostgreSQL) - user data & feedback storage
 
-**Deployment (Planned):**
-- FastAPI backend
-- Next.js frontend
-- Redis for caching
+**ML Pipeline:**
+- 140k+ plays analyzed from 6 years of listening history
+- 300 TF-IDF tag features + 7 behavioral features
+- 76% prediction accuracy on preference classification
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| 🎯 **ML Recommendations** | XGBoost model predicts what you'll like with confidence scores |
+| 🏷️ **Auto Tag Fetch** | One click genre tags from Last.fm |
+| 🔮 **Explore Mode** | Hide artists you already know for pure discovery |
+| 💡 **Explainable AI** | See WHY each artist was recommended (matching tags) |
+| ⚖️ **Weighted Similarity** | Toggle to prioritize rare/niche tags over common ones |
+| 👍👎 **Feedback System** | Rate recommendations to improve future training |
+| 📊 **Export Data** | Download feedback as CSV for model retraining |
+| 🎨 **Personalized Loading** | Your album artwork on the loading screen |
+| 🖼️ **Artist Images** | Real Spotify artist photos in results |
+
 
 ## Current Status 
 
 **Phase 1: Data & ML Foundation** ✅ COMPLETE
-
-- [x]  Spotify OAuth authentication
-- [x]  Listening history extraction (50 recent plays)
-- [x]  Extended history import (140,392 plays from 2019-2025)
-- [x]  SQLite database with incremental sync
-- [x]  Automated cron jobs (3x daily data collection)
-- [x]  [Last.fm] tag integration
-- [x]  Time weighted preference calculation
-- [x]  Composite scoring algorithm (sqrt scaling)
-- [x]  ML feature matrix preparation (1,540 unique tags)
+- [x] Spotify OAuth authentication
+- [x] Extended history import (140,392 plays from 2019-2025)
+- [x] Last.fm tag integration
+- [x] Time weighted preference calculation
+- [x] ML feature matrix (307 features)
 
 **Phase 2: ML Model Training** ✅ COMPLETE
+- [x] XGBoost + Random Forest training
+- [x] TF-IDF vectorization (300 tag features)
+- [x] 76% prediction accuracy
+- [x] IDF weighted similarity scoring
 
-- [x]  Data labeling (top 25% = "liked")
-- [x]  Feature engineering (tag based vectors)
-- [x]  Random Forest training
-- [x]  Model evaluation & tuning
-- [x]  Prediction pipeline
+**Phase 3: Production** ✅ COMPLETE
+- [x] FastAPI backend deployed on Render
+- [x] Next.js frontend deployed on Vercel
+- [x] Spotify OAuth with PKCE
+- [x] Supabase database integration
+- [x] User feedback collection
+- [x] Explore Mode (exclude known artists)
+- [x] Export feedback for retraining
 
-**Phase 3: Production** 🚧 IN PRODUCTION!! 
+## Technical Highlights
 
-- [X]  FastAPI backend MVP
-- [X]  Next.js frontend MVP
-- [x]  Model serving endpoint
-- [ ]  Deploy somewhere I can actually use it
-      
-## Why I'm Building This
+### Explainable AI
+Each recommendation shows the matching tags between your input and the suggested artist, sorted by rarity (IDF score). You see *why* the model thinks you'll like someone.
 
-1. **Real ML application** - Solving an actual problem with production grade code
+### Explore Mode
+Filters out your top 50 Spotify artists from recommendations. Pure discovery of artists you've never heard.
+
+### Weighted Similarity
+Toggle between:
+- **On:** Rare tags (like "icelandic" or "bedroom pop") weighted higher
+- **Off:** All tags weighted equally
+
+### Parallel Data Fetching
+Album artwork for the loading screen fetches in parallel with user data, reducing perceived load time while showing personalized content through preloading. 
+
+## Local Development
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+uvicorn app:app --reload
+
+# Frontend
+cd frontend/full_circle_ui
+npm install
+npm run dev
+```
+## Environment Variables
+
+**Frontend (.env.local):**
+```
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id
+NEXT_PUBLIC_REDIRECT_URI=http://127.0.0.1:3000/callback
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
+NEXT_PUBLIC_LASTFM_API_KEY=your_lastfm_key
+```
+## Why I Built This
+
+1. **Real ML application** - My first time solving an actual problem with (what I feel is) production grade code
 2. **Full stack ownership** - Data engineering → ML → API → Frontend → Deployment
-3. **Portfolio piece** - Something I use daily and can demo with confidence
-4. **Learning vehicle** - Touches every part of modern ML systems which lets me explore machine learning naturally!
+3. **Portfolio piece** - Something I use daily and can demo with confidence with friends!
+4. **Learning vehicle** - Touches every part of modern ML systems
 
-## Technical Challenges Solved
+## Long-term Vision
 
-### Bug Hunt: Backwards Time Weighting
-Spent 2+ hours debugging inverted time calculations where old plays had weight 1.0 and recent plays had weight ~0. Root cause: calculating `days_since_first` instead of `days_ago`. Classic mistake in time-series ML.
-
-### Mixed Timestamp Formats
-Spotify data has inconsistent timestamp precision (some with milliseconds, some without). Solved with `pd.to_datetime(format='ISO8601')` for automatic handling.
-
-### API Rate Limiting Strategy
-Instead of fetching tags for all 2,929 artists (20+ min), sample 500 liked + 500 not liked for balanced training set (~3-5 minutes).
-
-## Long term Vision
-
-- **Mood based playlist generation** - "Give me high energy morning music"
-- **Explainable recommendations** - "Recommended because: 45% reggaeton, 30% indie, 25% recent plays"
-- **Cross platform support** - Apple Music, YouTube Music integration
-- **Social features** - Share discoveries with friends
-- **Vinyl integration** - Camera monitoring which records I actually play and integrates that into my listening history
-- **Deep learning** - Hopefully work hard enough to fund some 5090 only to explore neural networks for audio feature analysis for further development! 
-  
-## Learning Goals
-
-- ✅ Time series feature engineering using datetime
-- ✅ Hybrid recommendation systems
-- ✅ API design and deployment
-- ✅ Frontend state management
-- 🚧 A better understanding of Frontend as a whole 
-- 🚧 A good understanding of the complex and core libaries of Machine Learning
-- 📋 Model monitoring and retraining
+- 🎭 Mood based playlist generation
+- 🍎 Apple Music / YouTube Music integration
+- 📀 Vinyl integration - camera monitoring for physical plays
+- 🧠 Neural networks for audio feature analysis
 
 ## Development Log
 
 Detailed technical documentation and debugging sessions in `DEV_LOG.md`.
 
+*Started: November 2025*  
+*Completed: December 2025*  
+
 ---
 
-*Started: November 2024*  
-**Current Phase:** Nearing of Project, deploying using Render & Vercel for a Dockerized Python backend. 
-Built with curiosity and too much time spent organizing playlists. Thank you Dan Sohval for the inspiration.
+Built with curiosity, too much time organizing playlists, and some very long all nighters. Thank you Dan Sohval for the inspiration.
 
+🔗 **Live Demo:** https://full-circle-theta.vercel.app

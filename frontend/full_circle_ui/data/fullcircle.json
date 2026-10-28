@@ -1,0 +1,2001 @@
+{
+  "model": {
+    "trained_at": "2025-11-28T20:13:03.489915",
+    "test_accuracy": 0.7619,
+    "cv_accuracy": 0.7936,
+    "n_features": 307
+  },
+  "threshold": 0.6,
+  "seeds": [
+    {
+      "seed": "Laufey",
+      "tags": [
+        "jazz",
+        "bossa nova",
+        "jazz pop",
+        "pop",
+        "female vocalists",
+        "icelandic",
+        "soul",
+        "traditional pop",
+        "singer-songwriter",
+        "iceland"
+      ],
+      "probability": 0.797,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Lamp",
+          "similarity": 0.5861,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "John Roseboro",
+          "similarity": 0.5401,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "singer-songwriter"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Liana Flores",
+          "similarity": 0.4765,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "singer-songwriter",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Lisa Ono",
+          "similarity": 0.4654,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "female",
+            "vocalists"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "grentperez",
+          "similarity": 0.4433,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "singer-songwriter",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Rin",
+          "similarity": 0.4407,
+          "matching_tags": [
+            "traditional",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Armando Trovajoli",
+          "similarity": 0.3784,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Piero Piccioni",
+          "similarity": 0.3664,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Ty's Music",
+          "similarity": 0.3615,
+          "matching_tags": [
+            "jazz"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Steve Lacy",
+          "similarity": 0.3189,
+          "matching_tags": [
+            "jazz",
+            "soul"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "Lamp",
+          "similarity": 0.6503,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Liana Flores",
+          "similarity": 0.5013,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "singer-songwriter",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "John Roseboro",
+          "similarity": 0.4842,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "singer-songwriter"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Ty's Music",
+          "similarity": 0.4681,
+          "matching_tags": [
+            "jazz"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Lisa Ono",
+          "similarity": 0.4606,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "jazz",
+            "female",
+            "vocalists"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Olivia Dean",
+          "similarity": 0.4465,
+          "matching_tags": [
+            "singer-songwriter",
+            "soul",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Steve Lacy",
+          "similarity": 0.4147,
+          "matching_tags": [
+            "jazz",
+            "soul"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "grentperez",
+          "similarity": 0.412,
+          "matching_tags": [
+            "bossa",
+            "nova",
+            "singer-songwriter",
+            "pop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Stephen Sanchez",
+          "similarity": 0.4119,
+          "matching_tags": [
+            "jazz",
+            "singer-songwriter",
+            "soul",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Eydie Gormé",
+          "similarity": 0.4119,
+          "matching_tags": [
+            "jazz",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Little Simz",
+      "tags": [
+        "rap",
+        "hip-hop",
+        "hip hop",
+        "grime",
+        "rnb",
+        "uk hip hop",
+        "british",
+        "conscious hip hop",
+        "neo-soul",
+        "uk"
+      ],
+      "probability": 0.8038,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "BexBlu",
+          "similarity": 0.5233,
+          "matching_tags": [
+            "grime",
+            "hop",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Plan B",
+          "similarity": 0.4403,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "J. Cole",
+          "similarity": 0.4295,
+          "matching_tags": [
+            "conscious",
+            "hop",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Knucks",
+          "similarity": 0.4161,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Dave",
+          "similarity": 0.4067,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Central Cee",
+          "similarity": 0.4064,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Headie One",
+          "similarity": 0.4022,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Rushy",
+          "similarity": 0.3692,
+          "matching_tags": [
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Damzz",
+          "similarity": 0.3686,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Kidwild",
+          "similarity": 0.3632,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "BexBlu",
+          "similarity": 0.509,
+          "matching_tags": [
+            "grime",
+            "hop",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Plan B",
+          "similarity": 0.4963,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Damzz",
+          "similarity": 0.4631,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Knucks",
+          "similarity": 0.4609,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Central Cee",
+          "similarity": 0.4558,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Headie One",
+          "similarity": 0.4515,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Dave",
+          "similarity": 0.4501,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "J. Cole",
+          "similarity": 0.4501,
+          "matching_tags": [
+            "conscious",
+            "hop",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Rushy",
+          "similarity": 0.4452,
+          "matching_tags": [
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Kidwild",
+          "similarity": 0.4384,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Dave",
+      "tags": [
+        "french",
+        "rap",
+        "grime",
+        "hip-hop",
+        "british",
+        "hip hop",
+        "pop",
+        "chanson francaise",
+        "uk",
+        "80s"
+      ],
+      "probability": 0.6939,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "BexBlu",
+          "similarity": 0.7323,
+          "matching_tags": [
+            "grime",
+            "hop",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Plan B",
+          "similarity": 0.6097,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Bakar",
+          "similarity": 0.5823,
+          "matching_tags": [
+            "french",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Knucks",
+          "similarity": 0.5473,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Little Simz",
+          "similarity": 0.5397,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Headie One",
+          "similarity": 0.5117,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Central Cee",
+          "similarity": 0.4834,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Damzz",
+          "similarity": 0.4585,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Morad",
+          "similarity": 0.4205,
+          "matching_tags": [
+            "french",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Nemzzz",
+          "similarity": 0.4075,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "BexBlu",
+          "similarity": 0.6832,
+          "matching_tags": [
+            "grime",
+            "hop",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Plan B",
+          "similarity": 0.6748,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Bakar",
+          "similarity": 0.6669,
+          "matching_tags": [
+            "french",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Little Simz",
+          "similarity": 0.5996,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Damzz",
+          "similarity": 0.5861,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Knucks",
+          "similarity": 0.5797,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Headie One",
+          "similarity": 0.5529,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Central Cee",
+          "similarity": 0.5224,
+          "matching_tags": [
+            "grime",
+            "uk",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Nemzzz",
+          "similarity": 0.5052,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Kidwild",
+          "similarity": 0.4943,
+          "matching_tags": [
+            "uk",
+            "british",
+            "rap",
+            "hip-hop"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Cuco",
+      "tags": [
+        "dream pop",
+        "experimental",
+        "indie pop",
+        "indie",
+        "rnb",
+        "post-rock",
+        "bedroom pop",
+        "chillwave",
+        "american",
+        "los angeles"
+      ],
+      "probability": 0.9021,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Vansire",
+          "similarity": 0.514,
+          "matching_tags": [
+            "chillwave",
+            "bedroom",
+            "dream",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "TV Girl",
+          "similarity": 0.4685,
+          "matching_tags": [
+            "chillwave",
+            "dream",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Not for Radio",
+          "similarity": 0.4424,
+          "matching_tags": [
+            "angeles",
+            "los",
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Malcolm Todd",
+          "similarity": 0.3973,
+          "matching_tags": [
+            "angeles",
+            "los",
+            "rnb",
+            "indie"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Current Joys",
+          "similarity": 0.3882,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "experimental",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "M83",
+          "similarity": 0.3768,
+          "matching_tags": [
+            "post-rock",
+            "dream",
+            "experimental",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Saga Faye",
+          "similarity": 0.3744,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "juju<3",
+          "similarity": 0.3609,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "marQ",
+          "similarity": 0.3539,
+          "matching_tags": [
+            "bedroom",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "d4vd",
+          "similarity": 0.3531,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "rnb",
+            "indie",
+            "pop"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "Vansire",
+          "similarity": 0.6225,
+          "matching_tags": [
+            "chillwave",
+            "bedroom",
+            "dream",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Current Joys",
+          "similarity": 0.5759,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "experimental",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Not for Radio",
+          "similarity": 0.5651,
+          "matching_tags": [
+            "angeles",
+            "los",
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "TV Girl",
+          "similarity": 0.5568,
+          "matching_tags": [
+            "chillwave",
+            "dream",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "d4vd",
+          "similarity": 0.5558,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "rnb",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Saga Faye",
+          "similarity": 0.5554,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "juju<3",
+          "similarity": 0.5463,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "The Marías",
+          "similarity": 0.5395,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "rnb",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Clairo",
+          "similarity": 0.5389,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "american",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Strawberry Guy",
+          "similarity": 0.5226,
+          "matching_tags": [
+            "bedroom",
+            "dream",
+            "indie",
+            "pop"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Rosalía",
+      "tags": [
+        "pop",
+        "spanish",
+        "flamenco",
+        "art pop",
+        "flamenco nuevo",
+        "spain",
+        "female vocalists",
+        "neoperreo",
+        "flamenco pop",
+        "reggaeton"
+      ],
+      "probability": 0.8823,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Arcángel",
+          "similarity": 0.8554,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "reggaeton"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "María Isabel",
+          "similarity": 0.7805,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Judeline",
+          "similarity": 0.6338,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "reggaeton",
+            "spanish",
+            "female",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Teo Planell",
+          "similarity": 0.1887,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Rocío Dúrcal",
+          "similarity": 0.1853,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "La Oreja de Van Gogh",
+          "similarity": 0.1776,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "La Quinta Estacion",
+          "similarity": 0.168,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Foudeqush",
+          "similarity": 0.1535,
+          "matching_tags": [
+            "art",
+            "spanish",
+            "pop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Billie Eilish",
+          "similarity": 0.147,
+          "matching_tags": [
+            "art",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Mitski",
+          "similarity": 0.1349,
+          "matching_tags": [
+            "art",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "María Isabel",
+          "similarity": 0.8482,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Arcángel",
+          "similarity": 0.8063,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "reggaeton"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Judeline",
+          "similarity": 0.7033,
+          "matching_tags": [
+            "flamenco",
+            "spain",
+            "reggaeton",
+            "spanish",
+            "female",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "La Oreja de Van Gogh",
+          "similarity": 0.3182,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "La Quinta Estacion",
+          "similarity": 0.301,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Rocío Dúrcal",
+          "similarity": 0.2826,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Teo Planell",
+          "similarity": 0.279,
+          "matching_tags": [
+            "spain",
+            "spanish",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Billie Eilish",
+          "similarity": 0.2711,
+          "matching_tags": [
+            "art",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Mitski",
+          "similarity": 0.2488,
+          "matching_tags": [
+            "art",
+            "female",
+            "vocalists",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Foudeqush",
+          "similarity": 0.2372,
+          "matching_tags": [
+            "art",
+            "spanish",
+            "pop"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Arctic Monkeys",
+      "tags": [
+        "indie rock",
+        "indie",
+        "british",
+        "alternative",
+        "rock",
+        "alternative rock",
+        "britpop",
+        "garage rock",
+        "post-punk revival",
+        "post-punk"
+      ],
+      "probability": 0.9262,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Franz Ferdinand",
+          "similarity": 0.8636,
+          "matching_tags": [
+            "revival",
+            "britpop",
+            "post-punk",
+            "british",
+            "alternative",
+            "rock"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "The Strokes",
+          "similarity": 0.7201,
+          "matching_tags": [
+            "revival",
+            "garage",
+            "post-punk",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "The Cure",
+          "similarity": 0.5485,
+          "matching_tags": [
+            "post-punk",
+            "british",
+            "alternative",
+            "rock"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "The Smiths",
+          "similarity": 0.5454,
+          "matching_tags": [
+            "post-punk",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Coldplay",
+          "similarity": 0.5264,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Blur",
+          "similarity": 0.5157,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "TV On The Radio",
+          "similarity": 0.5155,
+          "matching_tags": [
+            "post-punk",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Enjambre",
+          "similarity": 0.5005,
+          "matching_tags": [
+            "revival",
+            "garage",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Radiohead",
+          "similarity": 0.4866,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "The Verve",
+          "similarity": 0.4808,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "Franz Ferdinand",
+          "similarity": 0.904,
+          "matching_tags": [
+            "revival",
+            "britpop",
+            "post-punk",
+            "british",
+            "alternative",
+            "rock"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "The Strokes",
+          "similarity": 0.8197,
+          "matching_tags": [
+            "revival",
+            "garage",
+            "post-punk",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "The Smiths",
+          "similarity": 0.726,
+          "matching_tags": [
+            "post-punk",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Coldplay",
+          "similarity": 0.7223,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "TV On The Radio",
+          "similarity": 0.7013,
+          "matching_tags": [
+            "post-punk",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "The Cure",
+          "similarity": 0.696,
+          "matching_tags": [
+            "post-punk",
+            "british",
+            "alternative",
+            "rock"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Blur",
+          "similarity": 0.6899,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Radiohead",
+          "similarity": 0.6678,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "The Verve",
+          "similarity": 0.6597,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "The 1975",
+          "similarity": 0.6305,
+          "matching_tags": [
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Radiohead",
+      "tags": [
+        "rock",
+        "alternative",
+        "alternative rock",
+        "indie",
+        "electronic",
+        "british",
+        "experimental",
+        "indie rock",
+        "britpop",
+        "art rock"
+      ],
+      "probability": 0.9506,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Coldplay",
+          "similarity": 0.7424,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Blur",
+          "similarity": 0.7273,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "TV On The Radio",
+          "similarity": 0.7228,
+          "matching_tags": [
+            "art",
+            "experimental",
+            "electronic",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "The Verve",
+          "similarity": 0.6781,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Electric Light Orchestra",
+          "similarity": 0.5986,
+          "matching_tags": [
+            "art",
+            "british",
+            "electronic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Arctic Monkeys",
+          "similarity": 0.5753,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Gorillaz",
+          "similarity": 0.5589,
+          "matching_tags": [
+            "experimental",
+            "british",
+            "electronic",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Modest Mouse",
+          "similarity": 0.5567,
+          "matching_tags": [
+            "experimental",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "The 1975",
+          "similarity": 0.5541,
+          "matching_tags": [
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Franz Ferdinand",
+          "similarity": 0.5429,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "Coldplay",
+          "similarity": 0.8618,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "TV On The Radio",
+          "similarity": 0.8502,
+          "matching_tags": [
+            "art",
+            "experimental",
+            "electronic",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Blur",
+          "similarity": 0.8231,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "The Verve",
+          "similarity": 0.7872,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "The 1975",
+          "similarity": 0.7522,
+          "matching_tags": [
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Modest Mouse",
+          "similarity": 0.7447,
+          "matching_tags": [
+            "experimental",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Gorillaz",
+          "similarity": 0.7004,
+          "matching_tags": [
+            "experimental",
+            "british",
+            "electronic",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Electric Light Orchestra",
+          "similarity": 0.6941,
+          "matching_tags": [
+            "art",
+            "british",
+            "electronic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Arctic Monkeys",
+          "similarity": 0.6678,
+          "matching_tags": [
+            "britpop",
+            "british",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "The Neighbourhood",
+          "similarity": 0.6678,
+          "matching_tags": [
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "Tame Impala",
+      "tags": [
+        "psychedelic rock",
+        "psychedelic",
+        "indie rock",
+        "australian",
+        "rock",
+        "indie",
+        "neo-psychedelia",
+        "psychedelic pop",
+        "alternative",
+        "space rock"
+      ],
+      "probability": 0.8973,
+      "weighted": [
+        {
+          "rank": 1,
+          "artist": "Los Retros",
+          "similarity": 0.5247,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "The Verve",
+          "similarity": 0.4057,
+          "matching_tags": [
+            "space",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Omega",
+          "similarity": 0.4009,
+          "matching_tags": [
+            "space",
+            "psychedelic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Los Telepáticos",
+          "similarity": 0.394,
+          "matching_tags": [
+            "psychedelic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Inner Wave",
+          "similarity": 0.3879,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Dr. Dog",
+          "similarity": 0.3859,
+          "matching_tags": [
+            "psychedelic",
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "The Two Lips",
+          "similarity": 0.3843,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Daisy Jones & The Six",
+          "similarity": 0.3826,
+          "matching_tags": [
+            "psychedelic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "The Temper Trap",
+          "similarity": 0.3513,
+          "matching_tags": [
+            "australian",
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Jye",
+          "similarity": 0.3421,
+          "matching_tags": [
+            "australian"
+          ]
+        }
+      ],
+      "unweighted": [
+        {
+          "rank": 1,
+          "artist": "Los Retros",
+          "similarity": 0.6346,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "The Verve",
+          "similarity": 0.5433,
+          "matching_tags": [
+            "space",
+            "alternative",
+            "rock",
+            "indie"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "The 1975",
+          "similarity": 0.5251,
+          "matching_tags": [
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Inner Wave",
+          "similarity": 0.5235,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Daisy Jones & The Six",
+          "similarity": 0.5191,
+          "matching_tags": [
+            "psychedelic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "The Two Lips",
+          "similarity": 0.5177,
+          "matching_tags": [
+            "psychedelic",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Dr. Dog",
+          "similarity": 0.5038,
+          "matching_tags": [
+            "psychedelic",
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Omega",
+          "similarity": 0.5005,
+          "matching_tags": [
+            "space",
+            "psychedelic",
+            "rock"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "The Temper Trap",
+          "similarity": 0.496,
+          "matching_tags": [
+            "australian",
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "Coldplay",
+          "similarity": 0.4947,
+          "matching_tags": [
+            "alternative",
+            "rock",
+            "indie",
+            "pop"
+          ]
+        }
+      ]
+    }
+  ]
+}

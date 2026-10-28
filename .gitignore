@@ -7,3 +7,5 @@ Spotify Extended Streaming History/
 
 # spotipy token cache
 backend/.cache
+# demo review and handoff state (contains approved data drafts)
+.vibe-wise/
