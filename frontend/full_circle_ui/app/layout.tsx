@@ -1,19 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import "@/lib/fonts";
 import "./globals.css";
-import { SpotifyProvider } from "@/lib/spotifycontext";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "FullCircle Recs",
@@ -26,14 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SpotifyProvider>
-          {children}
-        </SpotifyProvider>
-        <SpeedInsights />
-        <Analytics />
-      </body>
+    // data-theme and lang are set on this element by Demo before first paint.
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
